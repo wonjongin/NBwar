@@ -8,6 +8,7 @@ public final class NBwar extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         getLogger().info("Plugin enabled");
+        getLogger().info("Thanks for using our plugin!!");
     }
 
     @Override
