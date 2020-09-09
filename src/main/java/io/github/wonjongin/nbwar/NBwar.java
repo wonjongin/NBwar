@@ -14,6 +14,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+
 
 public final class NBwar extends JavaPlugin implements Listener {
 
@@ -27,6 +29,15 @@ public final class NBwar extends JavaPlugin implements Listener {
         // Plugin startup logic
         getLogger().info("Plugin enabled");
         getLogger().info("Thanks for using our plugin!!");
+        File file = new File("./NBwar/Stat");
+        if(!file.exists()){
+            boolean result = file.mkdirs();
+            if(result){
+                getLogger().info("Make directory in plugin");
+            } else {
+                getLogger().warning("Fail to make directory in plugin");
+            }
+        }
     }
 
     @Override
@@ -121,5 +132,8 @@ public final class NBwar extends JavaPlugin implements Listener {
             event.setDamage(minusdamage);
             player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
         }
+    }
+    public void giveItem(String args[]){
+
     }
 }
