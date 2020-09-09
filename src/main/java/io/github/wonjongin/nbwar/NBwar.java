@@ -3,10 +3,19 @@ package io.github.wonjongin.nbwar;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-public final class NBwar extends JavaPlugin {
+public final class NBwar extends JavaPlugin implements Listener {
+
+    Player player;
+    public static double damage = 0;
+    public static double armor = 0;
 
     @Override
     public void onEnable() {
@@ -34,7 +43,9 @@ public final class NBwar extends JavaPlugin {
             } else if (args[0].equalsIgnoreCase("java")) {
                 sender.sendMessage(ChatColor.GREEN + "Java is programming language!!");
             } else if (args[0].equalsIgnoreCase("power")) {
-                sender.sendMessage(ChatColor.GREEN + "준비중...");
+                sender.sendMessage(ChatColor.GREEN + "당신의 파워는 " + damage + " 입니다.");
+            }else if(args[0].equalsIgnoreCase("statelevel")){
+                sender.sendMessage(ChatColor.BLACK+"당신의 래벨은 "+player.getLevel()+" 입니다.");
             } else if (args[0].equalsIgnoreCase("critical")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
             } else if (args[0].equalsIgnoreCase("drain")) {
@@ -49,6 +60,16 @@ public final class NBwar extends JavaPlugin {
             return true;
         }
         return false;
+    }
 
+    @EventHandler
+    public void playerLevelup(PlayerLevelChangeEvent event) {
+        damage++;
+    }
+
+    @EventHandler
+    public void PlayerState(EntityDamageByEntityEvent event){
+        Player player = (Player) event.getDamager();
+        event.setDamage(damage);
     }
 }
