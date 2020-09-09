@@ -8,13 +8,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
 public final class NBwar extends JavaPlugin implements Listener {
+
     Runtime runtime = Runtime.getRuntime();
+    Player player;
+    public static double damage = 0;
+    public static double armor = 0;
 
     @Override
     public void onEnable() {
@@ -49,7 +55,9 @@ public final class NBwar extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("java")) {
                 sender.sendMessage(ChatColor.GREEN + "Java is programming language!!");
             } else if (args[0].equalsIgnoreCase("power")) {
-                sender.sendMessage(ChatColor.GREEN + "준비자중...");
+                sender.sendMessage(ChatColor.GREEN + "당신의 파워는 " + damage + " 입니다.");
+            }else if(args[0].equalsIgnoreCase("state")){
+                sender.sendMessage(ChatColor.BLACK+"당신의 래벨은 "+player.getLevel()+" 입니다.");
             } else if (args[0].equalsIgnoreCase("critical")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
             } else if (args[0].equalsIgnoreCase("drain")) {
@@ -78,5 +86,40 @@ public final class NBwar extends JavaPlugin implements Listener {
         ItemStack itemStack = new ItemStack(block.getType());
         player.getInventory().addItem(itemStack);
         player.sendMessage(ChatColor.GREEN + "Get block twice!!");
+    }
+
+    @EventHandler
+    public void PlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        damage = player.getLevel();
+        armor = player.getLevel();
+    }
+
+    @EventHandler
+    public void PlayerLevelup(PlayerLevelChangeEvent event) {
+        Player player = event.getPlayer();
+        damage = player.getLevel();
+        armor = player.getLevel();
+    }
+
+    @EventHandler
+    public void PlayerStat(EntityDamageByEntityEvent event) {
+        double plusdamage = event.getDamage() + damage;
+        double minusdamage = event.getDamage() - armor;
+        if (minusdamage < 0) {
+            minusdamage = 0;
+        }
+
+        if (event.getDamager() instanceof Player) {
+            Player player = (Player) event.getDamager();
+            event.setDamage(plusdamage);
+            player.sendMessage((int) plusdamage + "의 피해를 입혔습니다.");
+        }
+
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            event.setDamage(minusdamage);
+            player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
+        }
     }
 }
