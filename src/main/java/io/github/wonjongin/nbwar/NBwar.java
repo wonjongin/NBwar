@@ -53,9 +53,9 @@ public final class NBwar extends JavaPlugin {
                 sender.sendMessage(ChatColor.GREEN + "/heal <amount>");
             } else if (args[0].equalsIgnoreCase("ram")) {
                 runtime.gc();
-                long totalMemory = runtime.totalMemory();
-                long memoryUsage = runtime.totalMemory() - runtime.freeMemory();
-                String resRamUsage = Long.toString(memoryUsage)+"/"+Long.toString(totalMemory);
+                double totalMemory = runtime.totalMemory()/1048576;
+                double memoryUsage = (runtime.totalMemory() - runtime.freeMemory())/1048576;
+                String resRamUsage = Double.toString(memoryUsage)+"/"+Double.toString(totalMemory);
                 sender.sendMessage(ChatColor.GREEN + resRamUsage);
             } else {
                 sender.sendMessage(ChatColor.RED + "Command Not Found");
