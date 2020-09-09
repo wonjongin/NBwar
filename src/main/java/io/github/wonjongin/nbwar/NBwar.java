@@ -29,7 +29,7 @@ public final class NBwar extends JavaPlugin implements Listener {
         // Plugin startup logic
         getLogger().info("Plugin enabled");
         getLogger().info("Thanks for using our plugin!!");
-        File file = new File("./NBwar/Stat");
+        File file = new File("./plugins/NBwar/Stat");
         if(!file.exists()){
             boolean result = file.mkdirs();
             if(result){
