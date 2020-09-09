@@ -34,7 +34,7 @@ public final class NBwar extends JavaPlugin {
             } else if (args[0].equalsIgnoreCase("java")) {
                 sender.sendMessage(ChatColor.GREEN + "Java is programming language!!");
             } else if (args[0].equalsIgnoreCase("power")) {
-                sender.sendMessage(ChatColor.GREEN + "준비자중...");
+                sender.sendMessage(ChatColor.GREEN + "준비중...");
             } else if (args[0].equalsIgnoreCase("critical")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
             } else if (args[0].equalsIgnoreCase("drain")) {
@@ -49,5 +49,6 @@ public final class NBwar extends JavaPlugin {
             return true;
         }
         return false;
+
     }
 }
