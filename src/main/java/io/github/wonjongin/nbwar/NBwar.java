@@ -13,7 +13,6 @@ public final class NBwar extends JavaPlugin {
         // Plugin startup logic
         getLogger().info("Plugin enabled");
         getLogger().info("Thanks for using our plugin!!");
-
     }
 
     @Override
@@ -23,6 +22,7 @@ public final class NBwar extends JavaPlugin {
     }
 
     @Override
+//    sender = 친 사람 cmd 명령 시작단어, args 명령본문 인
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("n")) {
             if (args.length == 0) {
@@ -34,7 +34,7 @@ public final class NBwar extends JavaPlugin {
             } else if (args[0].equalsIgnoreCase("java")) {
                 sender.sendMessage(ChatColor.GREEN + "Java is programming language!!");
             } else if (args[0].equalsIgnoreCase("power")) {
-                sender.sendMessage(ChatColor.GREEN + "준비중...");
+                sender.sendMessage(ChatColor.GREEN + "준비자중...");
             } else if (args[0].equalsIgnoreCase("critical")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
             } else if (args[0].equalsIgnoreCase("drain")) {
