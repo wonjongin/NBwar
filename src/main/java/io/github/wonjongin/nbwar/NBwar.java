@@ -73,7 +73,7 @@ public final class NBwar extends JavaPlugin implements Listener {
                 String resRamUsage = Double.toString(memoryUsage)+"MB/"+Double.toString(totalMemory)+"MB";
                 sender.sendMessage(ChatColor.GREEN + resRamUsage);
             } else {
-                sender.sendMessage(ChatColor.RED + "Command Not Found!");
+                sender.sendMessage(ChatColor.RED + "Command Not Found!!");
             }
             return true;
         }
