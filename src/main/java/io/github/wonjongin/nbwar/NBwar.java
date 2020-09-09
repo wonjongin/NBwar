@@ -42,7 +42,7 @@ public final class NBwar extends JavaPlugin {
             } else if (args[0].equalsIgnoreCase("defend")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
             } else if (args[0].equalsIgnoreCase("heal")) {
-                sender.sendMessage(ChatColor.GREEN + "준비중...");
+                sender.sendMessage(ChatColor.GREEN + "/heal <amount>");
             } else {
                 sender.sendMessage(ChatColor.RED + "Command Not Found");
             }
