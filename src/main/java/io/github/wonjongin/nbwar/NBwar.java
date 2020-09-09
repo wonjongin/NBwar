@@ -35,6 +35,14 @@ public final class NBwar extends JavaPlugin {
                 sender.sendMessage(ChatColor.GREEN + "Java is programming language!!");
             } else if (args[0].equalsIgnoreCase("power")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중");
+            } else if (args[0].equalsIgnoreCase("critical")) {
+                sender.sendMessage(ChatColor.GREEN + "준비중");
+            } else if (args[0].equalsIgnoreCase("drain")) {
+                sender.sendMessage(ChatColor.GREEN + "준비중");
+            } else if (args[0].equalsIgnoreCase("defend")) {
+                sender.sendMessage(ChatColor.GREEN + "준비중");
+            } else if (args[0].equalsIgnoreCase("heal")) {
+                sender.sendMessage(ChatColor.GREEN + "준비중");
             } else {
                 sender.sendMessage(ChatColor.RED + "Command Not Found");
             }

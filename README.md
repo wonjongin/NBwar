@@ -2,17 +2,17 @@
 A PVP plugin for minecraft 1.12.2
 
 ## Features
-공격력 
+공격력 (power)
 
-크리티컬 
+크리티컬 (critical)
 
-체력흡수 
+체력흡수 (drain)
 
 갑옷명령어(특징:갑옷을 입어야만 능력발휘) 
 
-방어력 
+방어력 (defend)
 
-체력
+체력 (heal)
 
 ## Installation
 
