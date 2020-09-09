@@ -133,7 +133,4 @@ public final class NBwar extends JavaPlugin implements Listener {
             player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
         }
     }
-    public void giveItem(String args[]){
-
-    }
 }
