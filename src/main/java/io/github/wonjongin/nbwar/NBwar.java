@@ -74,39 +74,4 @@ public final class NBwar extends JavaPlugin implements Listener {
         player.sendMessage("레벨: "+stat1[0]+"\n"+"공격력: "+stat1[1]+"크리티컬 확률: "+stat1[2]+"생명 흡혈"+stat1[3]);
     }
 
-    @EventHandler
-    public void PlayerJoin(PlayerJoinEvent event) {
-        event.setJoinMessage(ChatColor.YELLOW+event.getPlayer().getName()+"님께서 입장하였습니다.");
-        stat.CreateNewStat(event.getPlayer().getUniqueId().toString());
-        damage = player.getLevel();
-        armor = player.getLevel();
-    }
-
-    @EventHandler
-    public void PlayerLevelup(PlayerLevelChangeEvent event) {
-        Player player = event.getPlayer();
-        damage = player.getLevel();
-        armor = player.getLevel();
-    }
-
-    @EventHandler
-    public void PlayerStat(EntityDamageByEntityEvent event) {
-        double plusdamage = event.getDamage() + damage;
-        double minusdamage = event.getDamage() - armor;
-        if (minusdamage < 0) {
-            minusdamage = 0;
-        }
-
-        if (event.getDamager() instanceof Player) {
-            Player player = (Player) event.getDamager();
-            event.setDamage(plusdamage);
-            player.sendMessage((int) plusdamage + "의 피해를 입혔습니다.");
-        }
-
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            event.setDamage(minusdamage);
-            player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
-        }
-    }
 }

@@ -33,6 +33,8 @@ public class Stat {
         File folder_Location2 = new File("plugins/NBwar/Stat");
         long[] stat = new long[4];
 
+
+
         try {
             if(! fileName.exists()){
                 folder_Location1.mkdir();
