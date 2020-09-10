@@ -13,8 +13,12 @@ import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import oshi.SystemInfo;
+import oshi.hardware.GlobalMemory;
+import oshi.hardware.HardwareAbstractionLayer;
 
 import java.io.File;
+
 
 
 public final class NBwar extends JavaPlugin implements Listener {
@@ -78,11 +82,12 @@ public final class NBwar extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("heal")) {
                 sender.sendMessage(ChatColor.GREEN + "/heal <amount>");
             } else if (args[0].equalsIgnoreCase("ram")) {
-                runtime.gc();
-                double totalMemory = runtime.totalMemory()/1048576;
-                double memoryUsage = (runtime.totalMemory() - runtime.freeMemory())/1048576;
-                String resRamUsage = Double.toString(memoryUsage)+"MB/"+Double.toString(totalMemory)+"MB";
-                sender.sendMessage(ChatColor.GREEN + resRamUsage);
+                showMemory();
+//                runtime.gc();
+//                double totalMemory = runtime.totalMemory()/1048576;
+//                double memoryUsage = (runtime.totalMemory() - runtime.freeMemory())/1048576;
+//                String resRamUsage = Double.toString(memoryUsage)+"MB/"+Double.toString(totalMemory)+"MB";
+//                sender.sendMessage(ChatColor.GREEN + resRamUsage);
             } else {
                 sender.sendMessage(ChatColor.RED + "Command Not Found!");
             }
@@ -135,5 +140,19 @@ public final class NBwar extends JavaPlugin implements Listener {
     }
     public void giveItem(String args[]){
 
+    }
+    public void showMemory(){
+//        MemoryMXBean membean = ManagementFactory.getMemoryMXBean();
+//        MemoryUsage heap = membean.getHeapMemoryUsage();
+//        MemoryUsage nonheap = membean.getNonHeapMemoryUsage();
+        runtime.gc();
+        SystemInfo systemInfo = new SystemInfo();
+        HardwareAbstractionLayer hardwareAbstractionLayer = systemInfo.getHardware();
+        GlobalMemory globalMemory = hardwareAbstractionLayer.getMemory();
+        double totalMemory = ((double)globalMemory.getTotal())/1024/1024;
+        double availableMemory = ((double)globalMemory.getAvailable())/1024/1024;
+        double usageMemory = totalMemory - availableMemory;
+        String res = usageMemory + "MB/" + totalMemory + "MB";
+        player.sendMessage(ChatColor.AQUA + res);
     }
 }

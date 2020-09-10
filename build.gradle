@@ -22,6 +22,7 @@ repositories {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT'
+    compile group: 'com.github.oshi', name: 'oshi-core', version: '5.2.5'
 }
 
 processResources {
