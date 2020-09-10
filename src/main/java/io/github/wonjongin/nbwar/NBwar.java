@@ -1,6 +1,5 @@
 package io.github.wonjongin.nbwar;
 
-import io.github.wonjongin.nbwar.Stat.Stat;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -8,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,7 +14,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class NBwar extends JavaPlugin implements Listener {
 
-    Stat stat = new Stat();
     Player player;
     public static double damage = 0;
     public static double armor = 0;
@@ -49,7 +46,7 @@ public final class NBwar extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("power")) {
                 sender.sendMessage(ChatColor.GREEN + "당신의 파워는 " + damage + " 입니다.");
             }else if(args[0].equalsIgnoreCase("state")){
-                sender.sendMessage(ChatColor.GREEN + "준비중...");
+                sender.sendMessage(ChatColor.BLACK+"당신의 래벨은 "+player.getLevel()+" 입니다.");
             } else if (args[0].equalsIgnoreCase("critical")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
             } else if (args[0].equalsIgnoreCase("drain")) {
@@ -67,11 +64,37 @@ public final class NBwar extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void Chat(PlayerChatEvent event){
+    public void PlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        long[] stat1 = new long[4];
-        stat1 = stat.getStat(player.getUniqueId().toString());
-        player.sendMessage("레벨: "+stat1[0]+"\n"+"공격력: "+stat1[1]+"크리티컬 확률: "+stat1[2]+"생명 흡혈"+stat1[3]);
+        damage = player.getLevel();
+        armor = player.getLevel();
     }
 
+    @EventHandler
+    public void PlayerLevelup(PlayerLevelChangeEvent event) {
+        Player player = event.getPlayer();
+        damage = player.getLevel();
+        armor = player.getLevel();
+    }
+
+    @EventHandler
+    public void PlayerStat(EntityDamageByEntityEvent event) {
+        double plusdamage = event.getDamage() + damage;
+        double minusdamage = event.getDamage() - armor;
+        if (minusdamage < 0) {
+            minusdamage = 0;
+        }
+
+        if (event.getDamager() instanceof Player) {
+            Player player = (Player) event.getDamager();
+            event.setDamage(plusdamage);
+            player.sendMessage((int) plusdamage + "의 피해를 입혔습니다.");
+        }
+
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            event.setDamage(minusdamage);
+            player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
+        }
+    }
 }
