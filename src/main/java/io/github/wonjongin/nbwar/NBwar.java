@@ -18,6 +18,7 @@ import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 
 import static io.github.wonjongin.nbwar.Basic.isInteger;
+import static io.github.wonjongin.nbwar.FileIO.createFile;
 import static io.github.wonjongin.nbwar.GiveItem.giveItem;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
 
@@ -96,6 +97,8 @@ public final class NBwar extends JavaPlugin implements Listener {
                 sender.sendMessage(ChatColor.GREEN + "/heal <amount>");
             } else if (args[0].equalsIgnoreCase("item")||args[0].equalsIgnoreCase("it")) {
                 giveItem(player,args);
+            } else if (args[0].equalsIgnoreCase("test")||args[0].equalsIgnoreCase("tt")) {
+                createFile("./plugins/NBwar/test/test.txt", "test code \r\nhello world");
             } else if (args[0].equalsIgnoreCase("ram")) {
                 showMemory(sender);
 //                runtime.gc();
