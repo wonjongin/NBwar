@@ -13,12 +13,11 @@ import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import oshi.SystemInfo;
-import oshi.hardware.GlobalMemory;
-import oshi.hardware.HardwareAbstractionLayer;
 
 import java.io.File;
-
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 
 
 public final class NBwar extends JavaPlugin implements Listener {
@@ -82,7 +81,7 @@ public final class NBwar extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("heal")) {
                 sender.sendMessage(ChatColor.GREEN + "/heal <amount>");
             } else if (args[0].equalsIgnoreCase("ram")) {
-                showMemory();
+                showMemory(sender);
 //                runtime.gc();
 //                double totalMemory = runtime.totalMemory()/1048576;
 //                double memoryUsage = (runtime.totalMemory() - runtime.freeMemory())/1048576;
@@ -141,18 +140,19 @@ public final class NBwar extends JavaPlugin implements Listener {
     public void giveItem(String args[]){
 
     }
-    public void showMemory(){
-//        MemoryMXBean membean = ManagementFactory.getMemoryMXBean();
-//        MemoryUsage heap = membean.getHeapMemoryUsage();
-//        MemoryUsage nonheap = membean.getNonHeapMemoryUsage();
-        runtime.gc();
-        SystemInfo systemInfo = new SystemInfo();
-        HardwareAbstractionLayer hardwareAbstractionLayer = systemInfo.getHardware();
-        GlobalMemory globalMemory = hardwareAbstractionLayer.getMemory();
-        double totalMemory = ((double)globalMemory.getTotal())/1024/1024;
-        double availableMemory = ((double)globalMemory.getAvailable())/1024/1024;
-        double usageMemory = totalMemory - availableMemory;
-        String res = usageMemory + "MB/" + totalMemory + "MB";
-        player.sendMessage(ChatColor.AQUA + res);
+    public void showMemory(CommandSender sender){
+        MemoryMXBean membean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heap = membean.getHeapMemoryUsage();
+        MemoryUsage nonheap = membean.getNonHeapMemoryUsage();
+        String res = nonheap + "\n" + heap;
+        sender.sendMessage(ChatColor.AQUA + res);
+//        SystemInfo systemInfo = new SystemInfo();
+//        final HardwareAbstractionLayer hw = systemInfo.getHardware();
+//        final GlobalMemory memory = hw.getMemory();
+//        double totalMemory = ((double)memory.getTotal())/1024/1024;
+//        double availableMemory = ((double)memory.getAvailable())/1024/1024;
+//        double usageMemory = totalMemory - availableMemory;
+//        String res = usageMemory + "MB/" + totalMemory + "MB";
+//        player.sendMessage(ChatColor.AQUA + res);
     }
 }
