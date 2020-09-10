@@ -1,6 +1,7 @@
 package io.github.wonjongin.nbwar;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,12 +13,15 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
+
+import static io.github.wonjongin.nbwar.GiveItem.giveItem;
 
 
 public final class NBwar extends JavaPlugin implements Listener {
@@ -60,6 +64,7 @@ public final class NBwar extends JavaPlugin implements Listener {
 //    sender = 친 사람 cmd 명령 시작단어, args 명령본문 인
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("n")) {
+            Player player = (Player) sender;
             if (args.length == 0) {
                 sender.sendMessage(ChatColor.RED + "Type the command to execute.");
             } else if (args[0].equalsIgnoreCase("info")) {
@@ -80,6 +85,8 @@ public final class NBwar extends JavaPlugin implements Listener {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
             } else if (args[0].equalsIgnoreCase("heal")) {
                 sender.sendMessage(ChatColor.GREEN + "/heal <amount>");
+            } else if (args[0].equalsIgnoreCase("item")) {
+                giveItem(player,args);
             } else if (args[0].equalsIgnoreCase("ram")) {
                 showMemory(sender);
 //                runtime.gc();
@@ -137,15 +144,15 @@ public final class NBwar extends JavaPlugin implements Listener {
             player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
         }
     }
-    public void giveItem(String args[]){
 
-    }
     public void showMemory(CommandSender sender){
         MemoryMXBean membean = ManagementFactory.getMemoryMXBean();
         MemoryUsage heap = membean.getHeapMemoryUsage();
         MemoryUsage nonheap = membean.getNonHeapMemoryUsage();
         String res = nonheap + "\n" + heap;
+        sender.sendMessage(ChatColor.AQUA + "---------< RAM USAGE >---------");
         sender.sendMessage(ChatColor.AQUA + res);
+        sender.sendMessage(ChatColor.AQUA + "-------------------------------");
 //        SystemInfo systemInfo = new SystemInfo();
 //        final HardwareAbstractionLayer hw = systemInfo.getHardware();
 //        final GlobalMemory memory = hw.getMemory();
