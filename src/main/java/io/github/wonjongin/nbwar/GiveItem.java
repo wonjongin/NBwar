@@ -6,23 +6,30 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import static io.github.wonjongin.nbwar.Basic.isInteger;
+import static io.github.wonjongin.nbwar.Print.printLongLine;
 
 
 public class GiveItem {
     public static void giveItem(Player player, String[] args){
         PlayerInventory pi = player.getInventory();
+        String[] itemCommandList = {
+                "Item Commands",
+                "Type /n item <command>",
+                "preset(p) - 아이템 프리셋 ",
+                "search(s) - 아이템 검색 ",
+                "list(l) - 아이템 리스트 ",
+                "remove(rm) - 아이템 삭제 ",
+        };
         if(args.length==1){
-            String[] itemCommandList = {
-                    "Type /n item <command>",
-                    "preset(p) - 아이템 프리셋 ",
-                    "search(s) - 아이템 검색 ",
-                    "list(l) - 아이템 리스트 ",
-                    "remove(rm) - 아이템 삭제 ",
-            };
-            for (String s : itemCommandList) {
-                player.sendMessage(ChatColor.GOLD + s);
-            }
-        } else if(args[1].equalsIgnoreCase("list")){
+//            for (String s : itemCommandList) {
+//                player.sendMessage(ChatColor.GOLD + s);
+//            }
+            printLongLine(player, itemCommandList,1);
+        } else if(isInteger(args[1])){
+            int nowPage = Integer.parseInt(args[1]);
+            printLongLine(player, itemCommandList, nowPage);
+        } else if(args[1].equalsIgnoreCase("list")||args[1].equalsIgnoreCase("l")){
             if(args.length==2){
                 player.sendMessage(ChatColor.GOLD + "--< Item Classes >--");
                 player.sendMessage(ChatColor.GOLD + "1: 건축 / 2: 장식 / 3: 식료품 / 4: 도구");
@@ -65,8 +72,8 @@ public class GiveItem {
     }
     public static void presetItem(Player player, String arg){
         PlayerInventory pi = player.getInventory();
-        if(arg.equalsIgnoreCase("list")){
             String[] presetsList = {
+                    "Preset Lists",
                     "boom - 폭발용 ",
                     "harvest - 농사 ",
                     "war - 전쟁 ",
@@ -75,10 +82,16 @@ public class GiveItem {
                     "train - 기차 ",
                     "house - 집짓기 ",
                     "minor - 광질 ",
+                    "gold - 금 ",
             };
-            for (String s : presetsList) {
-                player.sendMessage(ChatColor.GOLD + s);
-            }
+        if(arg.equalsIgnoreCase("list")||arg.equalsIgnoreCase("l")){
+//            for (String s : presetsList) {
+//                player.sendMessage(ChatColor.GOLD + s);
+//            }
+            printLongLine(player,  presetsList, 1);
+        } else if(isInteger(arg)){
+            int nowPage = Integer.parseInt(arg);
+            printLongLine(player, presetsList, nowPage);
         } else if(arg.equalsIgnoreCase("boom")){
             ItemStack tnt = new ItemStack(Material.TNT, 64);
             ItemStack charger = new ItemStack(Material.FLINT_AND_STEEL);
@@ -102,6 +115,7 @@ public class GiveItem {
                     new ItemStack(Material.ARROW,64),
                     new ItemStack(Material.COOKED_CHICKEN,64),
                     new ItemStack(Material.BREAD,64),
+                    new ItemStack(Material.SPECTRAL_ARROW,64),
             };
             ItemStack[] looks = {
                     new ItemStack(Material.IRON_HELMET),

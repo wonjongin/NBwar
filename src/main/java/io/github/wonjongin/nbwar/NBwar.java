@@ -20,7 +20,9 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 
+import static io.github.wonjongin.nbwar.Basic.isInteger;
 import static io.github.wonjongin.nbwar.GiveItem.giveItem;
+import static io.github.wonjongin.nbwar.Print.printLongLine;
 
 
 public final class NBwar extends JavaPlugin implements Listener {
@@ -64,8 +66,27 @@ public final class NBwar extends JavaPlugin implements Listener {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("n")) {
             Player player = (Player) sender;
+            String[] commandsHelp = {
+                    "Help!! Type /n <page> ",
+                    "info - 플러그인 정보 ",
+                    "item - 아이템 관리 [얻기, 지우기...]",
+                    "ram - 램 정보 보기 ",
+                    "power(p) - 공격력 제어 (준비중)",
+                    "state(st) - 레벨 제어 (준비중)",
+                    "critical(cri) - 크리티컬 제어(준비중)",
+                    "drain(dr) - 체력흡수 제어(준비중)",
+                    "defend(df) - 방어력 제어(준비중)",
+                    "heal - 체력 제어(준비중)",
+            };
             if (args.length == 0) {
                 sender.sendMessage(ChatColor.RED + "Type the command to execute.");
+                printLongLine(player, commandsHelp, 1);
+            } else if (isInteger(args[0])) {
+                int pageNum = Integer.parseInt(args[0]);
+                printLongLine(player, commandsHelp, pageNum);
+            } else if (args[0].equalsIgnoreCase("help")) {
+                sender.sendMessage(ChatColor.YELLOW + "A PVP plugin for minecraft 1.12.2");
+                printLongLine(player, commandsHelp, 1);
             } else if (args[0].equalsIgnoreCase("info")) {
                 sender.sendMessage(ChatColor.YELLOW + "A PVP plugin for minecraft 1.12.2");
             } else if (args[0].equalsIgnoreCase("hello")) {
