@@ -22,6 +22,7 @@ import static io.github.wonjongin.nbwar.Basic.isInteger;
 import static io.github.wonjongin.nbwar.GiveItem.giveItem;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
 import static io.github.wonjongin.nbwar.Stat.Stat.printStat;
+import static io.github.wonjongin.nbwar.Stat.Stat.createNewStat;
 
 
 public final class NBwar extends JavaPlugin implements Listener {
@@ -44,6 +45,7 @@ public final class NBwar extends JavaPlugin implements Listener {
                 getLogger().warning("Fail to make directory in plugin");
             }
         }
+        createNewStat(player.getUniqueId().toString());
     }
 
     @Override

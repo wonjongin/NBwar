@@ -9,10 +9,10 @@ import java.util.List;
 
 
 public class Stat {
-    public void CreateNewStat(String player){
-        File fileName = new File("plugins/NBwar/Stat"+ player+".txt");
-        File folder_Location1= new File("plugins/NBwar");
-        File folder_Location2 = new File("plugins/NBwar/Stat");
+    public static void createNewStat(String player){
+        File fileName = new File("./plugins/NBwar/Stat"+ player+".txt");
+        File folder_Location1= new File("./plugins/NBwar");
+        File folder_Location2 = new File("./plugins/NBwar/Stat");
 
         try {
             if(! fileName.exists()){
@@ -29,11 +29,15 @@ public class Stat {
         }
     }
 
+    static int toInt(Object path){
+        return Integer.parseInt(path.toString());
+    }
+
     public static int[] getStat(String player){
-        File fileName = new File("plugins/NBwar/Stat"+ player+".txt");
-        File folder_Location1= new File("plugins/NBwar");
-        File folder_Location2 = new File("plugins/NBwar/Stat");
-        int[] stat = new int[4];
+        File fileName = new File("./plugins/NBwar/Stat"+ player+".txt");
+        File folder_Location1= new File("./plugins/NBwar");
+        File folder_Location2 = new File("./plugins/NBwar/Stat");
+        int stat[] = new int[4];
 
         try {
             if(! fileName.exists()){
@@ -51,7 +55,7 @@ public class Stat {
             }
 
             for(int i=0;i<4;i++){
-                stat[i] = Integer.parseInt(list.get(i).toString());
+                stat[i] = toInt(list.get(i));
             }
 
 
