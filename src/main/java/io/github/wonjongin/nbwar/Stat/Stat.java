@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Stat {
     public static void createNewStat(String player){
-        File fileName = new File("./plugins/NBwar/Stat"+ player+".txt");
+        File fileName = new File("./plugins/NBwar/Stat/"+player+".txt");
         File folder_Location1= new File("./plugins/NBwar");
         File folder_Location2 = new File("./plugins/NBwar/Stat");
 
@@ -34,7 +34,7 @@ public class Stat {
     }
 
     public static int[] getStat(String player){
-        File fileName = new File("./plugins/NBwar/Stat"+ player+".txt");
+        File fileName = new File("./plugins/NBwar/Stat/"+ player+".txt");
         File folder_Location1= new File("./plugins/NBwar");
         File folder_Location2 = new File("./plugins/NBwar/Stat");
         int stat[] = new int[4];
