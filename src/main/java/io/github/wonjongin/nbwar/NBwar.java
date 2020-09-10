@@ -45,7 +45,7 @@ public final class NBwar extends JavaPlugin implements Listener {
                 getLogger().warning("Fail to make directory in plugin");
             }
         }
-        createNewStat(player.getUniqueId().toString());
+
     }
 
     @Override
@@ -122,6 +122,7 @@ public final class NBwar extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         damage = player.getLevel();
         armor = player.getLevel();
+        createNewStat(player.getUniqueId().toString());
     }
 
     @EventHandler
