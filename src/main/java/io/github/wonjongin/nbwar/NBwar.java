@@ -72,19 +72,19 @@ public final class NBwar extends JavaPlugin implements Listener {
                 sender.sendMessage(ChatColor.GREEN + "Hello World!");
             } else if (args[0].equalsIgnoreCase("java")) {
                 sender.sendMessage(ChatColor.GREEN + "Java is programming language!!");
-            } else if (args[0].equalsIgnoreCase("power")) {
+            } else if (args[0].equalsIgnoreCase("power")||args[0].equalsIgnoreCase("p")) {
                 sender.sendMessage(ChatColor.GREEN + "당신의 파워는 " + damage + " 입니다.");
-            }else if(args[0].equalsIgnoreCase("state")){
+            }else if(args[0].equalsIgnoreCase("state")||args[0].equalsIgnoreCase("st")){
                 sender.sendMessage(ChatColor.BLACK+"당신의 래벨은 "+player.getLevel()+" 입니다.");
-            } else if (args[0].equalsIgnoreCase("critical")) {
+            } else if (args[0].equalsIgnoreCase("critical")||args[0].equalsIgnoreCase("cri")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
-            } else if (args[0].equalsIgnoreCase("drain")) {
+            } else if (args[0].equalsIgnoreCase("drain")||args[0].equalsIgnoreCase("dr")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
-            } else if (args[0].equalsIgnoreCase("defend")) {
+            } else if (args[0].equalsIgnoreCase("defend")||args[0].equalsIgnoreCase("df")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
             } else if (args[0].equalsIgnoreCase("heal")) {
                 sender.sendMessage(ChatColor.GREEN + "/heal <amount>");
-            } else if (args[0].equalsIgnoreCase("item")) {
+            } else if (args[0].equalsIgnoreCase("item")||args[0].equalsIgnoreCase("it")) {
                 giveItem(player,args);
             } else if (args[0].equalsIgnoreCase("ram")) {
                 showMemory(sender);
