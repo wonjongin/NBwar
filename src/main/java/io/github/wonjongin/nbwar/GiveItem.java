@@ -77,13 +77,14 @@ public class GiveItem {
                     "boom - 폭발물 ",
                     "harvest - 농사 ",
                     "war - 전쟁 ",
-                    "egg - 목축 ",
+                    "heal - 힐 ",
                     "comb - 커맨드 블록 ",
                     "fire - 불 피우기 ",
                     "iron - 철 ",
                     "train - 기차 ",
                     "house - 집짓기 ",
                     "minor - 광질 ",
+                    "egg - 목축 ",
             };
         if(arg.equalsIgnoreCase("list")||arg.equalsIgnoreCase("l")){
 //            for (String s : presetsList) {
@@ -202,6 +203,22 @@ public class GiveItem {
                     new ItemStack(Material.SHEARS,64),
             };
             giveItemsFor(player, egg);
+        } else if(arg.equalsIgnoreCase("heal")){
+            ItemStack[] heal = {
+                    new ItemStack(Material.MOB_SPAWNER,64),
+                    new ItemStack(Material.MONSTER_EGG,64),
+                    new ItemStack(Material.MONSTER_EGGS,64),
+                    new ItemStack(Material.FENCE ,64),
+                    new ItemStack(Material.FENCE_GATE ,64),
+                    new ItemStack(Material.WHEAT ,64),
+                    new ItemStack(Material.CARROT,5),
+                    new ItemStack(Material.SEEDS,64),
+                    new ItemStack(Material.BUCKET,64),
+                    new ItemStack(Material.DRAGON_EGG,64),
+                    new ItemStack(Material.EGG,64),
+                    new ItemStack(Material.SHEARS,64),
+            };
+            giveItemsFor(player, heal);
         } else {
             player.sendMessage(ChatColor.RED + "Preset Not Found!!");
         }
