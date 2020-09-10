@@ -29,11 +29,11 @@ public class Stat {
         }
     }
 
-    public static long[] getStat(String player){
+    public static int[] getStat(String player){
         File fileName = new File("plugins/NBwar/Stat"+ player+".txt");
         File folder_Location1= new File("plugins/NBwar");
         File folder_Location2 = new File("plugins/NBwar/Stat");
-        long[] stat = new long[4];
+        int[] stat = new int[4];
 
         try {
             if(! fileName.exists()){
@@ -47,11 +47,11 @@ public class Stat {
             String string;
 
             while((string = bufferedReader.readLine()) != null){
-                list.add(Long.valueOf((cutter(string))));
+                list.add(cutter(string));
             }
 
             for(int i=0;i<4;i++){
-                stat[i] = ((Long) list.get(i)).longValue();
+                stat[i] = Integer.parseInt(list.get(i).toString());
             }
 
 
@@ -62,11 +62,11 @@ public class Stat {
     }
 
     public static void printStat(String playerId, Player player){
-        long stat[] = getStat(playerId);
+        int stat[] = getStat(playerId);
         String playerStat[] = new String[stat.length];
 
         for(int i=0;i<stat.length;i++){
-            playerStat[i] = Long.toString(stat.length);
+            playerStat[i] = Integer.toString(stat.length);
         }
 
         player.sendMessage(playerStat);
