@@ -1,5 +1,6 @@
 package io.github.wonjongin.nbwar;
 
+import io.github.wonjongin.nbwar.Stat.Stat;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -20,6 +21,7 @@ import java.lang.management.MemoryUsage;
 import static io.github.wonjongin.nbwar.Basic.isInteger;
 import static io.github.wonjongin.nbwar.GiveItem.giveItem;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
+import static io.github.wonjongin.nbwar.Stat.Stat.printStat;
 
 
 public final class NBwar extends JavaPlugin implements Listener {
@@ -103,7 +105,9 @@ public final class NBwar extends JavaPlugin implements Listener {
 //                double memoryUsage = (runtime.totalMemory() - runtime.freeMemory())/1048576;
 //                String resRamUsage = Double.toString(memoryUsage)+"MB/"+Double.toString(totalMemory)+"MB";
 //                sender.sendMessage(ChatColor.GREEN + resRamUsage);
-            } else {
+            }else if (args[0].equalsIgnoreCase("mystat")||args[0].equalsIgnoreCase("myst")) {
+                printStat(player.getUniqueId().toString(), player);
+            }  else {
                 sender.sendMessage(ChatColor.RED + "Command Not Found!!");
             }
             return true;

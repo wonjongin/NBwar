@@ -1,5 +1,7 @@
 package io.github.wonjongin.nbwar.Stat;
 
+import org.bukkit.entity.Player;
+
 import java.io.*;
 import java.nio.Buffer;
 import java.util.ArrayList;
@@ -27,13 +29,11 @@ public class Stat {
         }
     }
 
-    public long[] getStat(String player){
+    public static long[] getStat(String player){
         File fileName = new File("plugins/NBwar/Stat"+ player+".txt");
         File folder_Location1= new File("plugins/NBwar");
         File folder_Location2 = new File("plugins/NBwar/Stat");
         long[] stat = new long[4];
-
-
 
         try {
             if(! fileName.exists()){
@@ -61,7 +61,18 @@ public class Stat {
         return stat;
     }
 
-    public long cutter(String string){
+    public static void printStat(String playerId, Player player){
+        long stat[] = getStat(playerId);
+        String playerStat[] = new String[stat.length];
+
+        for(int i=0;i<stat.length;i++){
+            playerStat[i] = Long.toString(stat.length);
+        }
+
+        player.sendMessage(playerStat);
+    }
+
+    public static long cutter(String string){
         String[] cut = string.split(":");
         return Long.parseLong(cut[1]);
     }
