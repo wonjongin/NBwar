@@ -1,7 +1,12 @@
 package io.github.wonjongin.nbwar;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import static org.bukkit.Bukkit.getLogger;
 
@@ -56,5 +61,28 @@ public class FileIO {
             e.printStackTrace();
         }
         return line;
+    }
+    public static String readFileOnce(String path){
+        File file = new File(path);
+        try{
+        Scanner scan = new Scanner(file);
+        String res = scan.toString();
+        return res;
+        } catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+        return "ERROR";
+    }
+    public static Object readJSON(String path){
+        //https://offbyone.tistory.com/373 참고
+        String str = readFileOnce(path);
+        ObjectMapper mapper = new ObjectMapper();
+        try{
+            Object read = mapper.readValue(str, Object.class);
+            return read;
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return false;
     }
 }
