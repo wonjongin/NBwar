@@ -69,7 +69,7 @@ public final class NBwar extends JavaPlugin implements Listener {
             String[] commandsHelp = {
                     "Help!! Type /n <page> ",
                     "info - 플러그인 정보 ",
-                    "item - 아이템 관리 [얻기, 지우기...]",
+                    "item(it) - 아이템 관리 [얻기, 지우기...]",
                     "ram - 램 정보 보기 ",
                     "power(p) - 공격력 제어 (준비중)",
                     "state(st) - 레벨 제어 (준비중)",

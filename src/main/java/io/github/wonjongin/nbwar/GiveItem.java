@@ -74,15 +74,16 @@ public class GiveItem {
         PlayerInventory pi = player.getInventory();
             String[] presetsList = {
                     "Preset Lists",
-                    "boom - 폭발용 ",
+                    "boom - 폭발물 ",
                     "harvest - 농사 ",
                     "war - 전쟁 ",
+                    "egg - 목축 ",
+                    "comb - 커맨드 블록 ",
                     "fire - 불 피우기 ",
                     "iron - 철 ",
                     "train - 기차 ",
                     "house - 집짓기 ",
                     "minor - 광질 ",
-                    "gold - 금 ",
             };
         if(arg.equalsIgnoreCase("list")||arg.equalsIgnoreCase("l")){
 //            for (String s : presetsList) {
@@ -172,6 +173,35 @@ public class GiveItem {
                     new ItemStack(Material.TORCH ,64),
             };
             giveItemsFor(player, minor);
+        } else if(arg.equalsIgnoreCase("comb")){
+            ItemStack[] comb = {
+                    new ItemStack(Material.COMMAND,64),
+                    new ItemStack(Material.STONE_BUTTON,64),
+                    new ItemStack(Material.STONE_PLATE,64),
+                    new ItemStack(Material.REDSTONE_TORCH_ON ,64),
+                    new ItemStack(Material.REDSTONE_BLOCK ,64),
+                    new ItemStack(Material.LEVER,64),
+                    new ItemStack(Material.WOOD_BUTTON,64),
+                    new ItemStack(Material.IRON_PLATE,64),
+                    new ItemStack(Material.BEACON,64),
+            };
+            giveItemsFor(player, comb);
+        } else if(arg.equalsIgnoreCase("egg")){
+            ItemStack[] egg = {
+                    new ItemStack(Material.MOB_SPAWNER,64),
+                    new ItemStack(Material.MONSTER_EGG,64),
+                    new ItemStack(Material.MONSTER_EGGS,64),
+                    new ItemStack(Material.FENCE ,64),
+                    new ItemStack(Material.FENCE_GATE ,64),
+                    new ItemStack(Material.WHEAT ,64),
+                    new ItemStack(Material.CARROT,5),
+                    new ItemStack(Material.SEEDS,64),
+                    new ItemStack(Material.BUCKET,64),
+                    new ItemStack(Material.DRAGON_EGG,64),
+                    new ItemStack(Material.EGG,64),
+                    new ItemStack(Material.SHEARS,64),
+            };
+            giveItemsFor(player, egg);
         } else {
             player.sendMessage(ChatColor.RED + "Preset Not Found!!");
         }
