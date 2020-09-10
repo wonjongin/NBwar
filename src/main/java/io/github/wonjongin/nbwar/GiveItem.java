@@ -6,22 +6,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.lang.reflect.Member;
 
 
 public class GiveItem {
-    public static void giveItem(Player player, String args[]){
+    public static void giveItem(Player player, String[] args){
         PlayerInventory pi = player.getInventory();
         if(args.length==1){
-            String itemCommandList[] = {
+            String[] itemCommandList = {
                     "Type /n item <command>",
                     "preset(p) - 아이템 프리셋 ",
                     "search(s) - 아이템 검색 ",
                     "list(l) - 아이템 리스트 ",
                     "remove(rm) - 아이템 삭제 ",
             };
-            for(int i = 0;i<itemCommandList.length;i++){
-                player.sendMessage(ChatColor.GOLD + itemCommandList[i]);
+            for (String s : itemCommandList) {
+                player.sendMessage(ChatColor.GOLD + s);
             }
         } else if(args[1].equalsIgnoreCase("list")){
             if(args.length==2){
@@ -56,6 +55,7 @@ public class GiveItem {
             ItemStack cobblestone = new ItemStack(Material.COBBLESTONE,64);
             ItemStack bread = new ItemStack(Material.BREAD,64);
             pi.addItem(cobblestone);
+            pi.addItem(bread);
             player.sendMessage(ChatColor.YELLOW + "Check inventory!!");
         }
 
@@ -66,7 +66,7 @@ public class GiveItem {
     public static void presetItem(Player player, String arg){
         PlayerInventory pi = player.getInventory();
         if(arg.equalsIgnoreCase("list")){
-            String presetsList[] = {
+            String[] presetsList = {
                     "boom - 폭발용 ",
                     "harvest - 농사 ",
                     "war - 전쟁 ",
@@ -76,8 +76,8 @@ public class GiveItem {
                     "house - 집짓기 ",
                     "minor - 광질 ",
             };
-            for(int i = 0;i<presetsList.length;i++){
-                player.sendMessage(ChatColor.GOLD + presetsList[i]);
+            for (String s : presetsList) {
+                player.sendMessage(ChatColor.GOLD + s);
             }
         } else if(arg.equalsIgnoreCase("boom")){
             ItemStack tnt = new ItemStack(Material.TNT, 64);
@@ -85,7 +85,7 @@ public class GiveItem {
             pi.addItem(tnt);
             pi.addItem(charger);
         } else if(arg.equalsIgnoreCase("harvest")){
-            ItemStack harvest[] = {
+            ItemStack[] harvest = {
                     new ItemStack(Material.SEEDS,64),
                     new ItemStack(Material.BEETROOT_SEEDS,64),
                     new ItemStack(Material.MELON_SEEDS,64),
@@ -95,7 +95,7 @@ public class GiveItem {
             };
             giveItemsFor(player, harvest);
         } else if(arg.equalsIgnoreCase("war")){
-            ItemStack weapons[] = {
+            ItemStack[] weapons = {
                     new ItemStack(Material.IRON_SWORD,2),
                     new ItemStack(Material.SHIELD,2),
                     new ItemStack(Material.BOW,2),
@@ -103,7 +103,7 @@ public class GiveItem {
                     new ItemStack(Material.COOKED_CHICKEN,64),
                     new ItemStack(Material.BREAD,64),
             };
-            ItemStack looks[] = {
+            ItemStack[] looks = {
                     new ItemStack(Material.IRON_HELMET),
                     new ItemStack(Material.IRON_CHESTPLATE),
                     new ItemStack(Material.IRON_LEGGINGS),
@@ -112,13 +112,13 @@ public class GiveItem {
             giveItemsFor(player, weapons);
             wearItemsFor(player, looks);
         } else if(arg.equalsIgnoreCase("fire")){
-            ItemStack fire[] = {
+            ItemStack[] fire = {
                     new ItemStack(Material.FLINT_AND_STEEL,2),
                     new ItemStack(Material.FIRE,64)
             };
             giveItemsFor(player, fire);
         } else if(arg.equalsIgnoreCase("iron")){
-            ItemStack iron[] = {
+            ItemStack[] iron = {
                     new ItemStack(Material.IRON_INGOT,64),
                     new ItemStack(Material.FURNACE,64),
                     new ItemStack(Material.COAL,64),
@@ -128,7 +128,7 @@ public class GiveItem {
             };
             giveItemsFor(player, iron);
         } else if(arg.equalsIgnoreCase("train")){
-            ItemStack train[] = {
+            ItemStack[] train = {
                     new ItemStack(Material.RAILS,64),
                     new ItemStack(Material.MINECART,3),
                     new ItemStack(Material.POWERED_RAIL,64),
@@ -138,7 +138,7 @@ public class GiveItem {
             };
             giveItemsFor(player, train);
         } else if(arg.equalsIgnoreCase("house")){
-            ItemStack house[] = {
+            ItemStack[] house = {
                     new ItemStack(Material.DIRT,64),
                     new ItemStack(Material.COBBLESTONE,64),
                     new ItemStack(Material.GLASS,64),
@@ -148,7 +148,7 @@ public class GiveItem {
             };
             giveItemsFor(player, house);
         } else if(arg.equalsIgnoreCase("minor")){
-            ItemStack minor[] = {
+            ItemStack[] minor = {
                     new ItemStack(Material.TNT,64),
                     new ItemStack(Material.FLINT_AND_STEEL,3),
                     new ItemStack(Material.IRON_PICKAXE,5),
@@ -164,9 +164,9 @@ public class GiveItem {
     }
     public static void giveItemsFor(Player player, ItemStack[] itemStacks){
         PlayerInventory pi = player.getInventory();
-        for(int i = 0;i<itemStacks.length;i++){
-            pi.addItem(itemStacks[i]);
-            String res = itemStacks[i]+" is given!";
+        for (ItemStack itemStack : itemStacks) {
+            pi.addItem(itemStack);
+            String res = itemStack + " is given!";
             player.sendMessage(ChatColor.GREEN + res);
         }
     }
@@ -176,8 +176,8 @@ public class GiveItem {
         pi.setChestplate(itemStacks[1]);
         pi.setLeggings(itemStacks[2]);
         pi.setBoots(itemStacks[3]);
-        for(int i = 0;i<itemStacks.length;i++){
-            String res = "You wear "+itemStacks[i]+" !";
+        for (ItemStack itemStack : itemStacks) {
+            String res = "You wear " + itemStack + " !";
             player.sendMessage(ChatColor.GREEN + res);
         }
     }
