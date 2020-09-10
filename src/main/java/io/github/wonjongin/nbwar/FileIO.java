@@ -1,9 +1,7 @@
 package io.github.wonjongin.nbwar;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 
 import static org.bukkit.Bukkit.getLogger;
 
@@ -43,5 +41,20 @@ public class FileIO {
         } catch (IOException e){
             e.printStackTrace();
         }
+    }
+    public static ArrayList<String> readFile(String path){
+        File file = new File(path);
+        ArrayList<String> line = new ArrayList<String>();
+        String str;
+        try{
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            while ((str = bufferedReader.readLine()) != null){
+                getLogger().info("readline: "+str);
+                line.add(str);
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return line;
     }
 }

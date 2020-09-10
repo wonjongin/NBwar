@@ -16,9 +16,11 @@ import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
+import java.util.ArrayList;
 
 import static io.github.wonjongin.nbwar.Basic.isInteger;
 import static io.github.wonjongin.nbwar.FileIO.createFile;
+import static io.github.wonjongin.nbwar.FileIO.readFile;
 import static io.github.wonjongin.nbwar.GiveItem.giveItem;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
 
@@ -98,7 +100,12 @@ public final class NBwar extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("item")||args[0].equalsIgnoreCase("it")) {
                 giveItem(player,args);
             } else if (args[0].equalsIgnoreCase("test")||args[0].equalsIgnoreCase("tt")) {
-                createFile("./plugins/NBwar/test/test.txt", "test code \r\nhello world");
+                createFile("./plugins/NBwar/test/test.txt", "test code \r\nhello world\r\nthree line");
+                ArrayList<String> testread = readFile("./plugins/NBwar/test/test.txt");
+                for(int i = 0;i<testread.size();i++){
+                    player.sendMessage(ChatColor.GREEN + testread.get(i));
+                    getLogger().info(testread.get(i));
+                }
             } else if (args[0].equalsIgnoreCase("ram")) {
                 showMemory(sender);
 //                runtime.gc();
