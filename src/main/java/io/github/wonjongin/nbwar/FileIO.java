@@ -1,9 +1,5 @@
 package io.github.wonjongin.nbwar;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -73,16 +69,7 @@ public class FileIO {
         }
         return "ERROR";
     }
-    public static Object readJSON(String path){
-        //https://offbyone.tistory.com/373 참고
-        String str = readFileOnce(path);
-        ObjectMapper mapper = new ObjectMapper();
-        try{
-            Object read = mapper.readValue(str, Object.class);
-            return read;
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return false;
+    public static void readJSON(String path){
+        // json-simple 사용 폰에 탭 참고
     }
 }
