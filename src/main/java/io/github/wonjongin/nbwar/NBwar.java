@@ -22,6 +22,7 @@ import static io.github.wonjongin.nbwar.Basic.isInteger;
 import static io.github.wonjongin.nbwar.FileIO.createFile;
 import static io.github.wonjongin.nbwar.FileIO.readFile;
 import static io.github.wonjongin.nbwar.GiveItem.giveItem;
+import static io.github.wonjongin.nbwar.Hardware.checkram;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
 
 
@@ -107,7 +108,8 @@ public final class NBwar extends JavaPlugin implements Listener {
                     getLogger().info(testread.get(i));
                 }
             } else if (args[0].equalsIgnoreCase("ram")) {
-                showMemory(sender);
+                checkram(player);
+//                showMemory(sender);
 //                runtime.gc();
 //                double totalMemory = runtime.totalMemory()/1048576;
 //                double memoryUsage = (runtime.totalMemory() - runtime.freeMemory())/1048576;
