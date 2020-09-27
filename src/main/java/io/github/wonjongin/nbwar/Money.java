@@ -1,5 +1,6 @@
 package io.github.wonjongin.nbwar;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -33,9 +34,11 @@ public class Money {
                 "Item Commands",
                 "Type /n mn <command>",
                 "view(v) - 돈 보기 ",
-                "set(s) - 지갑 생성 ",
+                "set(st) - 지갑 생성 ",
+                "send(s) - 보내기 ",
                 "withdraw(w) - 인출 ",
                 "deposit(w) - 예금 ",
+
         };
         if (args.length == 1) {
 //            for (String s : itemCommandList) {
@@ -45,7 +48,7 @@ public class Money {
         } else if (isInteger(args[1])) {
             int nowPage = Integer.parseInt(args[1]);
             printLongLine(player, moneyCommandList, nowPage);
-        } else if (args[1].equalsIgnoreCase("set") || args[1].equalsIgnoreCase("s")) {
+        } else if (args[1].equalsIgnoreCase("set") || args[1].equalsIgnoreCase("st")) {
             moneySetup(player);
         } else if (args[1].equalsIgnoreCase("view") || args[1].equalsIgnoreCase("v")) {
             moneyView(player);
@@ -63,7 +66,15 @@ public class Money {
                 moneyDeposit(player, Integer.parseInt(args[2]));
             }
 
-        }else {
+        } else if (args[1].equalsIgnoreCase("send") || args[1].equalsIgnoreCase("s")) {
+            if (args.length == 2 || args.length == 3) {
+                player.sendMessage("보낼 사람과 보내실 돈을 입력하세요 ");
+            } else {
+                Player receiver = Bukkit.getServer().getPlayer(args[2]);
+                moneySend(player, receiver, Integer.parseInt(args[3]));
+            }
+
+        } else {
             player.sendMessage("Not Found!!");
         }
     }
@@ -165,7 +176,7 @@ public class Money {
             lores.add("1 달러 입니다. 거래에 사용하세요");
             moneyPaper.setItemMeta(moneyPaperMeta);
             pi.addItem(new ItemStack[]{moneyPaper});
-            player.sendMessage(ChatColor.AQUA + "인출되었습니다.");
+            player.sendMessage(ChatColor.AQUA + Integer.toString(money) + " 달러가 인출되었습니다.");
             moneyYamlUpdate(player, userMoney - money);
         }
 
@@ -181,13 +192,25 @@ public class Money {
             if (inventoryMoney < money) {
                 player.sendMessage("돈이 부족합니다.");
             } else {
-                moneyYamlUpdate(player, moneyYamlRead(player)+money);
+                moneyYamlUpdate(player, moneyYamlRead(player) + money);
                 pi.getItemInMainHand().setAmount(pi.getItemInMainHand().getAmount() - i);
-                player.sendMessage(ChatColor.AQUA + "예금 하였습니다.");
+                player.sendMessage(ChatColor.AQUA + Integer.toString(money) + " 달러를 예금 하였습니다.");
             }
         } else {
             player.sendMessage("돈을 들고 하세요");
         }
 
+    }
+
+    public static void moneySend(Player sender, Player receiver, int money) {
+        if (moneyYamlRead(sender) < money) {
+            sender.sendMessage("돈이 부족합니다.");
+        } else {
+            moneyYamlUpdate(sender, moneyYamlRead(sender) - money);
+            moneyYamlUpdate(receiver, moneyYamlRead(receiver) + money);
+            String moneyStr = Integer.toString(money);
+            sender.sendMessage(ChatColor.AQUA + moneyStr + " 달러가 " + receiver.getName() + "에게 보내졌습니다. ");
+            receiver.sendMessage(ChatColor.GREEN + sender.getName() + "가 " + moneyStr + " 달러를 보냈습니다.");
+        }
     }
 }
