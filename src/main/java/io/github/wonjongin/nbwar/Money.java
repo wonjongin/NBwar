@@ -1,0 +1,193 @@
+package io.github.wonjongin.nbwar;
+
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.yaml.snakeyaml.Yaml;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static io.github.wonjongin.nbwar.Basic.isInteger;
+import static io.github.wonjongin.nbwar.FileIO.createFile;
+import static io.github.wonjongin.nbwar.FileIO.readFileOnce;
+import static io.github.wonjongin.nbwar.Print.printLongLine;
+import static org.bukkit.Bukkit.getLogger;
+
+public class Money {
+    // Money.yml
+    // players:
+    //     - <uuid>
+    //     - <uuid>
+    // <uuid>: 1000
+    // <uuid>: 3999
+    public static void moneyCommands(Player player, String[] args) {
+        String[] moneyCommandList = {
+                "Item Commands",
+                "Type /n mn <command>",
+                "view(v) - 돈 보기 ",
+                "set(s) - 지갑 생성 ",
+                "withdraw(w) - 인출 ",
+                "deposit(w) - 예금 ",
+        };
+        if (args.length == 1) {
+//            for (String s : itemCommandList) {
+//                player.sendMessage(ChatColor.GOLD + s);
+//            }
+            printLongLine(player, moneyCommandList, 1);
+        } else if (isInteger(args[1])) {
+            int nowPage = Integer.parseInt(args[1]);
+            printLongLine(player, moneyCommandList, nowPage);
+        } else if (args[1].equalsIgnoreCase("set") || args[1].equalsIgnoreCase("s")) {
+            moneySetup(player);
+        } else if (args[1].equalsIgnoreCase("view") || args[1].equalsIgnoreCase("v")) {
+            moneyView(player);
+        } else if (args[1].equalsIgnoreCase("withdraw") || args[1].equalsIgnoreCase("w")) {
+            if (args.length == 2) {
+                player.sendMessage("인출 하실 돈의 양을 입력하세요!");
+            } else {
+                moneyWithdraw(player, Integer.parseInt(args[2]));
+            }
+
+        } else if (args[1].equalsIgnoreCase("deposit") || args[1].equalsIgnoreCase("d")) {
+            if (args.length == 2) {
+                player.sendMessage("예금 하실 돈의 양을 입력하세요!");
+            } else {
+                moneyDeposit(player, Integer.parseInt(args[2]));
+            }
+
+        }else {
+            player.sendMessage("Not Found!!");
+        }
+    }
+
+    public static void moneySetup(Player player) {
+        String uuid = player.getUniqueId().toString();
+        // createFile("./plugins/NBwar/Money/Money.yml", "uuid: money");
+        Yaml yaml = new Yaml();
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(new File("./plugins/NBwar/Money/Money.yml"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Map<String, Object> obj = yaml.load(inputStream);
+        String list = readFileOnce("./plugins/NBwar/Money/Money.yml");
+        if (list.contains(uuid)) {
+//            String money = (String) obj.get(uuid);
+        } else {
+            FileWriter writer = null;
+            try {
+                writer = new FileWriter("./plugins/NBwar/Money/Money.yml");
+                obj.put(uuid, 1);
+                yaml.dump(obj, writer);
+//                player.sendMessage(yaml.dump(obj));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+//            playersList.add(uuid);
+//            obj.put("players", new String[]{uuid});
+
+
+//            createFile("./plugins/NBwar/Money/Money.yml", uuid+": 100000");
+        }
+    }
+
+    public static void moneyYamlUpdate(Player player, int money) {
+        String uuid = player.getUniqueId().toString();
+        Yaml yaml = new Yaml();
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(new File("./plugins/NBwar/Money/Money.yml"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Map<String, Object> obj = yaml.load(inputStream);
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter("./plugins/NBwar/Money/Money.yml");
+            obj.put(uuid, money);
+            yaml.dump(obj, writer);
+//                player.sendMessage(yaml.dump(obj));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void moneyView(Player player) {
+        String uuid = player.getUniqueId().toString();
+        Yaml yaml = new Yaml();
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(new File("./plugins/NBwar/Money/Money.yml"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Map<String, Object> obj = yaml.load(inputStream);
+        String list = readFileOnce("./plugins/NBwar/Money/Money.yml");
+        String money = obj.get(uuid).toString();
+        player.sendMessage(ChatColor.YELLOW + money + " 달러가 있습니다.");
+
+    }
+
+    public static int moneyYamlRead(Player player) {
+        String uuid = player.getUniqueId().toString();
+        Yaml yaml = new Yaml();
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(new File("./plugins/NBwar/Money/Money.yml"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Map<String, Object> obj = yaml.load(inputStream);
+        String money = obj.get(uuid).toString();
+        return Integer.parseInt(money);
+    }
+
+    public static void moneyWithdraw(Player player, int money) {
+        PlayerInventory pi = player.getInventory();
+        int i = money;
+        int userMoney = moneyYamlRead(player);
+        if (money > userMoney) {
+            player.sendMessage("돈이 부족합니다.");
+        } else {
+            ItemStack moneyPaper = new ItemStack(Material.PAPER, i);
+            ItemMeta moneyPaperMeta = moneyPaper.getItemMeta();
+            moneyPaperMeta.setDisplayName("1 달러");
+            ArrayList<String> lores = new ArrayList<>();
+            lores.add("1 달러 입니다. 거래에 사용하세요");
+            moneyPaper.setItemMeta(moneyPaperMeta);
+            pi.addItem(new ItemStack[]{moneyPaper});
+            player.sendMessage(ChatColor.AQUA + "인출되었습니다.");
+            moneyYamlUpdate(player, userMoney - money);
+        }
+
+
+    }
+
+    public static void moneyDeposit(Player player, int money) {
+        PlayerInventory pi = player.getInventory();
+        int i = money;
+        int userMoney = moneyYamlRead(player);
+        if (pi.getItemInMainHand().getItemMeta().getDisplayName().contains("1 달러")) {
+            int inventoryMoney = pi.getItemInMainHand().getAmount();
+            if (inventoryMoney < money) {
+                player.sendMessage("돈이 부족합니다.");
+            } else {
+                moneyYamlUpdate(player, moneyYamlRead(player)+money);
+                pi.getItemInMainHand().setAmount(pi.getItemInMainHand().getAmount() - i);
+                player.sendMessage(ChatColor.AQUA + "예금 하였습니다.");
+            }
+        } else {
+            player.sendMessage("돈을 들고 하세요");
+        }
+
+    }
+}

@@ -23,6 +23,7 @@ import static io.github.wonjongin.nbwar.FileIO.createFile;
 import static io.github.wonjongin.nbwar.FileIO.readFile;
 import static io.github.wonjongin.nbwar.GiveItem.giveItem;
 import static io.github.wonjongin.nbwar.Hardware.checkram;
+import static io.github.wonjongin.nbwar.Money.moneyCommands;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
 
 
@@ -38,10 +39,10 @@ public final class NBwar extends JavaPlugin implements Listener {
         getLogger().info("Plugin enabled");
         getLogger().info("Thanks for using our plugin!!");
         File file = new File("./plugins/NBwar/Stat");
-        if(!file.exists()){
+        if (!file.exists()) {
             boolean result = file.mkdirs();
-            if(result){
-                getLogger().info("Make directory in plugin");
+            if (result) {
+                getLogger().info("Stat directory was created in plugin");
             } else {
                 getLogger().warning("Fail to make directory in plugin");
             }
@@ -64,6 +65,7 @@ public final class NBwar extends JavaPlugin implements Listener {
                     "info - 플러그인 정보 ",
                     "item(it) - 아이템 관리 [얻기, 지우기...]",
                     "ram - 램 정보 보기 ",
+                    "money(mn) - 돈 제어",
                     "power(p) - 공격력 제어 (준비중)",
                     "state(st) - 레벨 제어 (준비중)",
                     "critical(cri) - 크리티컬 제어(준비중)",
@@ -86,27 +88,29 @@ public final class NBwar extends JavaPlugin implements Listener {
                 sender.sendMessage(ChatColor.GREEN + "Hello World!");
             } else if (args[0].equalsIgnoreCase("java")) {
                 sender.sendMessage(ChatColor.GREEN + "Java is programming language!!");
-            } else if (args[0].equalsIgnoreCase("power")||args[0].equalsIgnoreCase("p")) {
+            } else if (args[0].equalsIgnoreCase("power") || args[0].equalsIgnoreCase("p")) {
                 sender.sendMessage(ChatColor.GREEN + "당신의 파워는 " + damage + " 입니다.");
-            }else if(args[0].equalsIgnoreCase("state")||args[0].equalsIgnoreCase("st")){
-                sender.sendMessage(ChatColor.BLACK+"당신의 래벨은 "+player.getLevel()+" 입니다.");
-            } else if (args[0].equalsIgnoreCase("critical")||args[0].equalsIgnoreCase("cri")) {
+            } else if (args[0].equalsIgnoreCase("state") || args[0].equalsIgnoreCase("st")) {
+                sender.sendMessage(ChatColor.BLACK + "당신의 래벨은 " + player.getLevel() + " 입니다.");
+            } else if (args[0].equalsIgnoreCase("critical") || args[0].equalsIgnoreCase("cri")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
-            } else if (args[0].equalsIgnoreCase("drain")||args[0].equalsIgnoreCase("dr")) {
+            } else if (args[0].equalsIgnoreCase("drain") || args[0].equalsIgnoreCase("dr")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
-            } else if (args[0].equalsIgnoreCase("defend")||args[0].equalsIgnoreCase("df")) {
+            } else if (args[0].equalsIgnoreCase("defend") || args[0].equalsIgnoreCase("df")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
             } else if (args[0].equalsIgnoreCase("heal")) {
                 sender.sendMessage(ChatColor.GREEN + "/heal <amount>");
-            } else if (args[0].equalsIgnoreCase("item")||args[0].equalsIgnoreCase("it")) {
-                giveItem(player,args);
-            } else if (args[0].equalsIgnoreCase("test")||args[0].equalsIgnoreCase("tt")) {
+            } else if (args[0].equalsIgnoreCase("item") || args[0].equalsIgnoreCase("it")) {
+                giveItem(player, args);
+            } else if (args[0].equalsIgnoreCase("test") || args[0].equalsIgnoreCase("tt")) {
                 createFile("./plugins/NBwar/test/test.txt", "test code \r\nhello world\r\nthree line");
                 ArrayList<String> testread = readFile("./plugins/NBwar/test/test.txt");
-                for(int i = 0;i<testread.size();i++){
+                for (int i = 0; i < testread.size(); i++) {
                     player.sendMessage(ChatColor.GREEN + testread.get(i));
                     getLogger().info(testread.get(i));
                 }
+            } else if (args[0].equalsIgnoreCase("money") || args[0].equalsIgnoreCase("mn")) {
+                moneyCommands(player, args);
             } else if (args[0].equalsIgnoreCase("ram")) {
                 checkram(player);
 //                showMemory(sender);
@@ -158,7 +162,7 @@ public final class NBwar extends JavaPlugin implements Listener {
         }
     }
 
-    public void showMemory(CommandSender sender){
+    public void showMemory(CommandSender sender) {
         MemoryMXBean membean = ManagementFactory.getMemoryMXBean();
         MemoryUsage heap = membean.getHeapMemoryUsage();
         MemoryUsage nonheap = membean.getNonHeapMemoryUsage();

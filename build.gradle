@@ -25,7 +25,7 @@ dependencies {
 //    compile group: 'com.github.oshi', name: 'oshi-core', version: '5.2.5'
 //    compile group: 'org.hyperic', name: 'sigar', version: '1.6.4'
     compile 'com.googlecode.json-simple:json-simple:1.1.1'
-
+    compile 'org.yaml:snakeyaml:1.27'
 }
 
 processResources {
