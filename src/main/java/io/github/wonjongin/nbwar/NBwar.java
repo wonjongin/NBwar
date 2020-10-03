@@ -19,6 +19,7 @@ import java.lang.management.MemoryUsage;
 import java.util.ArrayList;
 
 import static io.github.wonjongin.nbwar.Basic.isInteger;
+import static io.github.wonjongin.nbwar.Develop.devCommand;
 import static io.github.wonjongin.nbwar.FileIO.createFile;
 import static io.github.wonjongin.nbwar.FileIO.readFile;
 import static io.github.wonjongin.nbwar.GiveItem.giveItem;
@@ -47,6 +48,11 @@ public final class NBwar extends JavaPlugin implements Listener {
                 getLogger().warning("Fail to make directory in plugin");
             }
         }
+        File moneyFile = new File("./plugins/NBwar/Money/Money.yml");
+        if (!moneyFile.exists()){
+            createFile("./plugins/NBwar/Money/Money.yml", "{ uuid: money }");
+        }
+
     }
 
     @Override
@@ -119,7 +125,9 @@ public final class NBwar extends JavaPlugin implements Listener {
 //                double memoryUsage = (runtime.totalMemory() - runtime.freeMemory())/1048576;
 //                String resRamUsage = Double.toString(memoryUsage)+"MB/"+Double.toString(totalMemory)+"MB";
 //                sender.sendMessage(ChatColor.GREEN + resRamUsage);
-            } else {
+            } else if (args[0].equalsIgnoreCase("dev")) {
+                devCommand(player, args);
+            }else {
                 sender.sendMessage(ChatColor.RED + "Command Not Found!!");
             }
             return true;

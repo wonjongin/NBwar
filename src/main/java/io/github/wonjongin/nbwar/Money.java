@@ -31,7 +31,7 @@ public class Money {
     // <uuid>: 3999
     public static void moneyCommands(Player player, String[] args) {
         String[] moneyCommandList = {
-                "Item Commands",
+                "Money Commands",
                 "Type /n mn <command>",
                 "view(v) - 돈 보기 ",
                 "set(st) - 지갑 생성 ",
@@ -68,10 +68,14 @@ public class Money {
 
         } else if (args[1].equalsIgnoreCase("send") || args[1].equalsIgnoreCase("s")) {
             if (args.length == 2 || args.length == 3) {
-                player.sendMessage("보낼 사람과 보내실 돈을 입력하세요 ");
+                player.sendMessage("보낼 사람과 보내실 돈을 입력하세요. 원한다면 뒤에 메시지도 입력하세요(띄어쓰기 불가)");
             } else {
                 Player receiver = Bukkit.getServer().getPlayer(args[2]);
-                moneySend(player, receiver, Integer.parseInt(args[3]));
+                if (args.length == 4) {
+                    moneySend(player, receiver, Integer.parseInt(args[3]), "null");
+                } else if (args.length == 5) {
+                    moneySend(player, receiver, Integer.parseInt(args[3]), args[4]);
+                }
             }
 
         } else {
@@ -100,6 +104,8 @@ public class Money {
                 obj.put(uuid, 1);
                 yaml.dump(obj, writer);
 //                player.sendMessage(yaml.dump(obj));
+                getLogger().info("Money of " + player.getName() + " is set up");
+                getLogger().info("UUID is " + uuid);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -145,7 +151,7 @@ public class Money {
         String list = readFileOnce("./plugins/NBwar/Money/Money.yml");
         String money = obj.get(uuid).toString();
         player.sendMessage(ChatColor.YELLOW + money + " 달러가 있습니다.");
-
+        getLogger().info(player.getName() + "'s money is " + money + " $");
     }
 
     public static int moneyYamlRead(Player player) {
@@ -178,6 +184,8 @@ public class Money {
             pi.addItem(new ItemStack[]{moneyPaper});
             player.sendMessage(ChatColor.AQUA + Integer.toString(money) + " 달러가 인출되었습니다.");
             moneyYamlUpdate(player, userMoney - money);
+            getLogger().info(player.getName() + " withdrawed " + Integer.toString(money) + " $");
+            getLogger().info(player.getName() + " has " + Integer.toString(userMoney) + " $");
         }
 
 
@@ -195,6 +203,8 @@ public class Money {
                 moneyYamlUpdate(player, moneyYamlRead(player) + money);
                 pi.getItemInMainHand().setAmount(pi.getItemInMainHand().getAmount() - i);
                 player.sendMessage(ChatColor.AQUA + Integer.toString(money) + " 달러를 예금 하였습니다.");
+                getLogger().info(player.getName() + " deposited " + Integer.toString(money) + " $");
+                getLogger().info(player.getName() + " has " + Integer.toString(moneyYamlRead(player)) + " $");
             }
         } else {
             player.sendMessage("돈을 들고 하세요");
@@ -202,7 +212,7 @@ public class Money {
 
     }
 
-    public static void moneySend(Player sender, Player receiver, int money) {
+    public static void moneySend(Player sender, Player receiver, int money, String msg) {
         if (moneyYamlRead(sender) < money) {
             sender.sendMessage("돈이 부족합니다.");
         } else {
@@ -210,7 +220,15 @@ public class Money {
             moneyYamlUpdate(receiver, moneyYamlRead(receiver) + money);
             String moneyStr = Integer.toString(money);
             sender.sendMessage(ChatColor.AQUA + moneyStr + " 달러가 " + receiver.getName() + "에게 보내졌습니다. ");
-            receiver.sendMessage(ChatColor.GREEN + sender.getName() + "가 " + moneyStr + " 달러를 보냈습니다.");
+            if (msg.equals("null")) {
+                receiver.sendMessage(ChatColor.GREEN + sender.getName() + "가 " + moneyStr + " 달러를 보냈습니다.");
+                getLogger().info(sender.getName() + " sent " + receiver.getName() + " " + moneyStr + " $");
+            } else {
+                receiver.sendMessage(ChatColor.GREEN + sender.getName() + "가 " + moneyStr + " 달러를 보냈습니다.");
+                receiver.sendMessage(ChatColor.GREEN + "송금 메시지: " + msg);
+                getLogger().info(sender.getName() + " sent " + receiver.getName() + " " + moneyStr + " $ and " + msg);
+            }
+
         }
     }
 }
