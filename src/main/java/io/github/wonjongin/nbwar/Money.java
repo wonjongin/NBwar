@@ -24,9 +24,6 @@ import static org.bukkit.Bukkit.getLogger;
 
 public class Money {
     // Money.yml
-    // players:
-    //     - <uuid>
-    //     - <uuid>
     // <uuid>: 1000
     // <uuid>: 3999
     public static void moneyCommands(Player player, String[] args) {
