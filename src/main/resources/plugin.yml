@@ -5,4 +5,4 @@ main: io.github.wonjongin.nbwar.NBwar
 
 commands:
   n:
-    description: command
+    description: Command of NBwar! Type /n

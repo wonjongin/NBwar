@@ -1,14 +1,18 @@
 package io.github.wonjongin.nbwar;
 
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,12 +29,12 @@ import static io.github.wonjongin.nbwar.FileIO.readFile;
 import static io.github.wonjongin.nbwar.GiveItem.giveItem;
 import static io.github.wonjongin.nbwar.Hardware.checkram;
 import static io.github.wonjongin.nbwar.Money.moneyCommands;
+import static io.github.wonjongin.nbwar.Money.moneySetup;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
 
 
-public final class NBwar extends JavaPlugin implements Listener {
+public class NBwar extends JavaPlugin implements Listener {
 
-    Player player;
     public static double damage = 0;
     public static double armor = 0;
 
@@ -49,10 +53,12 @@ public final class NBwar extends JavaPlugin implements Listener {
             }
         }
         File moneyFile = new File("./plugins/NBwar/Money/Money.yml");
-        if (!moneyFile.exists()){
+        if (!moneyFile.exists()) {
             createFile("./plugins/NBwar/Money/Money.yml", "{ uuid: money }");
         }
-
+        getServer().getPluginManager().registerEvents(this, this);
+        // 이벤트 핸들링 하려면 반드시 필요함
+        getLogger().info("EventHandler is enabled");
     }
 
     @Override
@@ -127,7 +133,7 @@ public final class NBwar extends JavaPlugin implements Listener {
 //                sender.sendMessage(ChatColor.GREEN + resRamUsage);
             } else if (args[0].equalsIgnoreCase("dev")) {
                 devCommand(player, args);
-            }else {
+            } else {
                 sender.sendMessage(ChatColor.RED + "Command Not Found!!");
             }
             return true;
@@ -136,8 +142,11 @@ public final class NBwar extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void PlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        moneySetup(player);
+        event.setJoinMessage(ChatColor.AQUA + "Welcome to NBwar!");
+        getLogger().info(player.getName() + " came into server!");
         damage = player.getLevel();
         armor = player.getLevel();
     }
@@ -169,22 +178,12 @@ public final class NBwar extends JavaPlugin implements Listener {
             player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
         }
     }
-
-    public void showMemory(CommandSender sender) {
-        MemoryMXBean membean = ManagementFactory.getMemoryMXBean();
-        MemoryUsage heap = membean.getHeapMemoryUsage();
-        MemoryUsage nonheap = membean.getNonHeapMemoryUsage();
-        String res = nonheap + "\n" + heap;
-        sender.sendMessage(ChatColor.AQUA + "---------< RAM USAGE >---------");
-        sender.sendMessage(ChatColor.AQUA + res);
-        sender.sendMessage(ChatColor.AQUA + "-------------------------------");
-//        SystemInfo systemInfo = new SystemInfo();
-//        final HardwareAbstractionLayer hw = systemInfo.getHardware();
-//        final GlobalMemory memory = hw.getMemory();
-//        double totalMemory = ((double)memory.getTotal())/1024/1024;
-//        double availableMemory = ((double)memory.getAvailable())/1024/1024;
-//        double usageMemory = totalMemory - availableMemory;
-//        String res = usageMemory + "MB/" + totalMemory + "MB";
-//        player.sendMessage(ChatColor.AQUA + res);
+    @EventHandler
+    public void breakBlock(BlockBreakEvent event){
+        Player player = event.getPlayer();
+        Block block = event.getBlock();
+        ItemStack itemStack = new ItemStack(block.getType());
+        player.getInventory().addItem(itemStack);
+        player.sendMessage(ChatColor.GREEN + "Get block twice!!");
     }
 }

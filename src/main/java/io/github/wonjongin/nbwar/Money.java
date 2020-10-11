@@ -34,7 +34,7 @@ public class Money {
                 "Money Commands",
                 "Type /n mn <command>",
                 "view(v) - 돈 보기 ",
-                "set(st) - 지갑 생성 ",
+//                "set(st) - 지갑 생성 ",
                 "send(s) - 보내기 ",
                 "withdraw(w) - 인출 ",
                 "deposit(w) - 예금 ",
@@ -95,9 +95,7 @@ public class Money {
         }
         Map<String, Object> obj = yaml.load(inputStream);
         String list = readFileOnce("./plugins/NBwar/Money/Money.yml");
-        if (list.contains(uuid)) {
-//            String money = (String) obj.get(uuid);
-        } else {
+        if (!obj.containsKey(uuid)) {
             FileWriter writer = null;
             try {
                 writer = new FileWriter("./plugins/NBwar/Money/Money.yml");
@@ -230,5 +228,46 @@ public class Money {
             }
 
         }
+    }
+
+    public static int[] moneyCounter(int totalMoney) {
+        int d100 = 0; // 100 달러
+        int d50 = 0;
+        int d20 = 0;
+        int d10 = 0;
+        int d5 = 0;
+        int d2 = 0;
+        int d1 = 0;
+        int tmpMoney = totalMoney;
+        while (tmpMoney >= 100) {
+            tmpMoney = tmpMoney - 100;
+            d100++;
+        }
+        while (tmpMoney >= 50) {
+            tmpMoney = tmpMoney - 50;
+            d50++;
+        }
+        while (tmpMoney >= 20) {
+            tmpMoney = tmpMoney - 20;
+            d20++;
+        }
+        while (tmpMoney >= 10) {
+            tmpMoney = tmpMoney - 10;
+            d10++;
+        }
+        while (tmpMoney >= 5) {
+            tmpMoney = tmpMoney - 5;
+            d5++;
+        }
+        while (tmpMoney >= 2) {
+            tmpMoney = tmpMoney - 2;
+            d2++;
+        }
+        while (tmpMoney >= 1) {
+            tmpMoney = tmpMoney - 1;
+            d1++;
+        }
+
+        return new int[]{d100, d50, d20, d10, d5, d2, d1};
     }
 }
