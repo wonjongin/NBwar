@@ -1,5 +1,6 @@
 package io.github.wonjongin.nbwar;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -23,6 +24,8 @@ import java.lang.management.MemoryUsage;
 import java.util.ArrayList;
 
 import static io.github.wonjongin.nbwar.Basic.isInteger;
+import static io.github.wonjongin.nbwar.ControlPlayerStats.addHealthDouble;
+import static io.github.wonjongin.nbwar.ControlPlayerStats.healthCommands;
 import static io.github.wonjongin.nbwar.Develop.devCommand;
 import static io.github.wonjongin.nbwar.FileIO.createFile;
 import static io.github.wonjongin.nbwar.FileIO.readFile;
@@ -110,8 +113,8 @@ public class NBwar extends JavaPlugin implements Listener {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
             } else if (args[0].equalsIgnoreCase("defend") || args[0].equalsIgnoreCase("df")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
-            } else if (args[0].equalsIgnoreCase("heal")) {
-                sender.sendMessage(ChatColor.GREEN + "/heal <amount>");
+            } else if (args[0].equalsIgnoreCase("heal") || args[0].equalsIgnoreCase("hl")) {
+                healthCommands(player, args);
             } else if (args[0].equalsIgnoreCase("item") || args[0].equalsIgnoreCase("it")) {
                 giveItem(player, args);
             } else if (args[0].equalsIgnoreCase("test") || args[0].equalsIgnoreCase("tt")) {
@@ -178,8 +181,9 @@ public class NBwar extends JavaPlugin implements Listener {
             player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
         }
     }
+
     @EventHandler
-    public void breakBlock(BlockBreakEvent event){
+    public void breakBlock(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         ItemStack itemStack = new ItemStack(block.getType());

@@ -10,8 +10,9 @@ public class Develop {
     public static void devCommand(Player player, String[] args) {
         String[] devCommandList = {
                 "Dev Commands",
-                "Type /n mn <command>",
+                "Type /n dev <command>",
                 "color(cl) - 색 보기 ",
+                "deco(dc) - 꾸밈효과 보기"
         };
         if (args.length == 1) {
             printLongLine(player, devCommandList, 1);
@@ -20,6 +21,10 @@ public class Develop {
             printLongLine(player, devCommandList, nowPage);
         } else if (args[1].equalsIgnoreCase("color") || args[1].equalsIgnoreCase("cl")) {
             viewColor(player);
+        } else if (args[1].equalsIgnoreCase("deco") || args[1].equalsIgnoreCase("dc")) {
+            viewDecorate(player);
+        } else {
+            player.sendMessage(ChatColor.RED + "Command Not Found!");
         }
     }
 
@@ -40,5 +45,13 @@ public class Develop {
         player.sendMessage(ChatColor.LIGHT_PURPLE + "Light Purple #d");
         player.sendMessage(ChatColor.YELLOW + "Yellow #e");
         player.sendMessage(ChatColor.WHITE + "White #f");
+    }
+
+    private static void viewDecorate(Player player) {
+        player.sendMessage(ChatColor.BOLD + "Bold #l");
+        player.sendMessage(ChatColor.STRIKETHROUGH + "Strikethrough #m");
+        player.sendMessage(ChatColor.ITALIC + "Italic #o");
+        player.sendMessage(ChatColor.RESET + "Reset #r");
+        player.sendMessage(ChatColor.MAGIC + "Magic #???");
     }
 }

@@ -34,7 +34,7 @@ public class Money {
 //                "set(st) - 지갑 생성 ",
                 "send(s) - 보내기 ",
                 "withdraw(w) - 인출 ",
-                "deposit(w) - 예금 ",
+                "deposit(d) - 예금 ",
 
         };
         if (args.length == 1) {
