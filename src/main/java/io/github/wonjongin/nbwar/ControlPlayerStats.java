@@ -28,16 +28,20 @@ public class ControlPlayerStats {
             int nowPage = Integer.parseInt(args[1]);
             printLongLine(player, healthCommandList, nowPage);
         } else if (args[1].equalsIgnoreCase("setlim") || args[1].equalsIgnoreCase("sl")) {
-            if (args.length <= 3){
-                player.sendMessage(ChatColor.RED+"유저이름과 양을 입력하세요");
+            if (args.length < 3) {
+                player.sendMessage(ChatColor.RED + "유저이름과 양을 입력하세요");
+            } else if (args.length == 3) {
+                setLimitHealth(player, player, Double.parseDouble(args[2]));
             } else {
-            setLimitHealth(player, Bukkit.getServer().getPlayer(args[2]), Double.parseDouble(args[3]));
+                setLimitHealth(player, Bukkit.getServer().getPlayer(args[2]), Double.parseDouble(args[3]));
             }
         } else if (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("a")) {
-            if (args.length <= 3){
-                player.sendMessage(ChatColor.RED+"유저이름과 양을 입력하세요");
+            if (args.length < 3) {
+                player.sendMessage(ChatColor.RED + "유저이름과 양을 입력하세요");
+            } else if (args.length == 3) {
+                addHealthDouble(player, player, Double.parseDouble(args[2]));
             } else {
-            addHealthDouble(player, Bukkit.getServer().getPlayer(args[2]), Double.parseDouble(args[3]));
+                addHealthDouble(player, Bukkit.getServer().getPlayer(args[2]), Double.parseDouble(args[3]));
             }
         } else {
             player.sendMessage("Commads Not Found!!");
@@ -48,7 +52,7 @@ public class ControlPlayerStats {
         double maxHealth = receiver.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
         double initialHealth = receiver.getHealth();
         double finalHealth = initialHealth + amountofHeal;
-        if (finalHealth >= maxHealth){
+        if (finalHealth >= maxHealth) {
             finalHealth = maxHealth;
             amountofHeal = maxHealth - initialHealth;
         }
