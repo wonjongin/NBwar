@@ -2,6 +2,8 @@ package io.github.wonjongin.nbwar;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -186,8 +188,18 @@ public class NBwar extends JavaPlugin implements Listener {
     public void breakBlock(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
-        ItemStack itemStack = new ItemStack(block.getType());
-        player.getInventory().addItem(itemStack);
-        player.sendMessage(ChatColor.GREEN + "Get block twice!!");
+        ItemStack breakitem = event.getPlayer().getInventory().getItemInMainHand();
+        if(breakitem.getType() != Material.WOOD_AXE && breakitem.getType() != Material.GOLD_AXE ){
+            ItemStack itemStack = new ItemStack(block.getType());
+            player.sendMessage(ChatColor.GREEN + "Block Num: " + ChatColor.YELLOW + block.getTypeId());
+        }
+        Location location = block.getLocation();
+
+        // player.getWorld().getBlockAt(location).setType(block.getType());
+
+
+        // player.getInventory().addItem(itemStack);
+        // player.sendMessage(ChatColor.GREEN + "Get block twice!!");
+
     }
 }

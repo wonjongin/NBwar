@@ -26,6 +26,7 @@ dependencies {
 //    compile group: 'org.hyperic', name: 'sigar', version: '1.6.4'
     compile 'com.googlecode.json-simple:json-simple:1.1.1'
     compile 'org.yaml:snakeyaml:1.27'
+    implementation 'org.projectlombok:lombok:1.16.16'
 }
 
 processResources {
