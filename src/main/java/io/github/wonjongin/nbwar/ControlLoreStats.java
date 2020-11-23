@@ -1,5 +1,7 @@
 package io.github.wonjongin.nbwar;
 
+import de.tr7zw.nbtapi.NBTCompound;
+import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -19,6 +21,14 @@ public class ControlLoreStats {
         itemMeta.setLore(loreStats.toLoreList());
         item.setItemMeta(itemMeta);
         player.sendMessage(ChatColor.YELLOW + "공격력이 " + loreStats.getPower() + "(으)로 설정되었습니다.");
+    }
+    public static void setNBTPower(Player player, String powerStr){
+        int power = Integer.parseInt(powerStr);
+        ItemStack item = player.getInventory().getItemInMainHand();
+        NBTItem nbti = new NBTItem(item);
+        NBTCompound itemData = NBTItem.convertItemtoNBT(item);
+        
+
     }
 
     public static void initLoreStats(ItemStack item) {

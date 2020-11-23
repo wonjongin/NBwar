@@ -246,9 +246,13 @@ public class NBwar extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         ItemStack breakitem = event.getPlayer().getInventory().getItemInMainHand();
-        if (breakitem.getType() != Material.WOOD_AXE && breakitem.getType() != Material.GOLD_AXE) {
+        if (breakitem.getType() != Material.WOOD_AXE) {
             ItemStack itemStack = new ItemStack(block.getType());
             player.sendMessage(ChatColor.GREEN + "Block Num: " + ChatColor.YELLOW + block.getTypeId());
+            if (breakitem.getType().equals(Material.GOLD_AXE)) {
+                Location location = block.getLocation();
+                event.setCancelled(true);
+            }
         }
         Location location = block.getLocation();
 

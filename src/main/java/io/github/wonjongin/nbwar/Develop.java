@@ -1,9 +1,12 @@
 package io.github.wonjongin.nbwar;
 
+import de.tr7zw.nbtapi.NBTCompound;
+import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -24,6 +27,8 @@ public class Develop {
                 "location(lo) - 플레이어 위치보기",
                 "lore(l) - 로어보기",
                 "addlore(al) - 로어추가",
+                "loreStats(ls) - 로어스탯보기",
+                "NBT(nbt) - NBT 보기",
         };
         if (args.length == 1) {
             printLongLine(player, devCommandList, 1);
@@ -40,7 +45,11 @@ public class Develop {
             viewLore(player);
         } else if (args[1].equalsIgnoreCase("addlore") || args[1].equalsIgnoreCase("al")) {
             addLore(player, args[2]);
-        }else {
+        } else if (args[1].equalsIgnoreCase("loreStats") || args[1].equalsIgnoreCase("ls")) {
+            viewLoreStats(player);
+        }else if (args[1].equalsIgnoreCase("NBT") || args[1].equalsIgnoreCase("nbt")) {
+            viewNBT(player);
+        } else {
             player.sendMessage(ChatColor.RED + "Command Not Found!");
         }
     }
@@ -106,23 +115,47 @@ public class Develop {
 
     public static void viewLore(Player player) {
         ItemMeta itemMeta = player.getInventory().getItemInMainHand().getItemMeta();
-        player.sendMessage("Title: "+ itemMeta.getDisplayName());
+        player.sendMessage("Title: " + itemMeta.getDisplayName());
         List<String> lore = itemMeta.getLore();
         for (int i = 0; i < lore.size(); i++) {
             player.sendMessage("Lore: " + lore.get(i));
         }
-    }public static void addLore(Player player, String str) {
+    }
+
+    public static void addLore(Player player, String str) {
         ItemMeta itemMeta = player.getInventory().getItemInMainHand().getItemMeta();
-        if(!itemMeta.hasLore()){
+        if (!itemMeta.hasLore()) {
             itemMeta.setLore(Arrays.asList(""));
         }
         List<String> lore = itemMeta.getLore();
         lore.add(str);
         itemMeta.setLore(lore);
         player.getInventory().getItemInMainHand().setItemMeta(itemMeta);
-        player.sendMessage("Title: "+ itemMeta.getDisplayName());
+        player.sendMessage("Title: " + itemMeta.getDisplayName());
         for (int i = 0; i < lore.size(); i++) {
             player.sendMessage("Lore: " + lore.get(i));
         }
+    }
+
+    public static void viewNBT(Player player) {
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        NBTItem nbti = new NBTItem(itemStack);
+
+        player.sendMessage(ChatColor.AQUA + nbti.getKeys().toString());
+
+    }
+
+    public static void viewLoreStats(Player player) {
+        ItemStack item = player.getInventory().getItemInMainHand();
+        LoreStats loreStats = new LoreStats().parseToLoreStats(item);
+
+        player.sendMessage("공격력 : " + loreStats.getPower());
+        player.sendMessage("크리확률 : " + loreStats.getCriticalPercent());
+        player.sendMessage("크리데미지 : " + loreStats.getCritical());
+        player.sendMessage("체력 : " + loreStats.getHealth());
+        player.sendMessage("피흡 : " + loreStats.getDrain());
+        player.sendMessage("방어력 : " + loreStats.getDefend());
+        player.sendMessage("방어력무시 : " + loreStats.getIgnoreDefend());
+
     }
 }

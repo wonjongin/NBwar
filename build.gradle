@@ -18,6 +18,10 @@ repositories {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
+    maven {
+        name = 'codemc-repo'
+        url = 'https://repo.codemc.org/repository/maven-public/'
+    }
 }
 
 dependencies {
@@ -28,6 +32,8 @@ dependencies {
     compile 'org.yaml:snakeyaml:1.27'
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+    compile 'de.tr7zw:item-nbt-api-plugin:2.6.0'
 }
 
 processResources {

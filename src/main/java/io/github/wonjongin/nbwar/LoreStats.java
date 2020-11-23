@@ -90,21 +90,21 @@ public class LoreStats {
         List<String> lore = itemMeta.getLore();
         for (int i = 0; i < lore.size(); i++) {
             String str = lore.get(i).replaceAll(patternNumStr, "");
-            getLogger().info("로어str" + str);
-            if (str.contains("공격력:")) {
+            getLogger().info("로어str: " + str);
+            if (lore.get(i).contains(statsNames.get(0))) {
                 this.power = Integer.parseInt(str);
                 getLogger().info("공격력" + "::: " + str);
-            } else if (str.contains("크리확률:")) {
+            } else if (lore.get(i).contains(statsNames.get(1))) {
                 this.criticalPercent = Integer.parseInt(str);
-            } else if (str.contains("크리데미지:")) {
+            } else if (lore.get(i).contains(statsNames.get(2))) {
                 this.critical = Integer.parseInt(str);
-            } else if (str.contains("체력:")) {
+            } else if (lore.get(i).contains(statsNames.get(3))) {
                 this.health = Integer.parseInt(str);
-            } else if (str.contains("피흡:")) {
+            } else if (lore.get(i).contains(statsNames.get(4))) {
                 this.drain = Integer.parseInt(str);
-            } else if (str.contains("방어력:")) {
+            } else if (lore.get(i).contains(statsNames.get(5))) {
                 this.defend = Integer.parseInt(str);
-            } else if (str.contains("방어력무시:")) {
+            } else if (lore.get(i).contains(statsNames.get(6))) {
                 this.ignoreDefend = Integer.parseInt(str);
             } else {
                 continue;
@@ -117,7 +117,8 @@ public class LoreStats {
     public ArrayList<String> toLoreList() {
         ArrayList<String> res = new ArrayList<>();
         for (int i = 0; i < this.getAllLore().size(); i++) {
-            res.add(ChatColor.YELLOW + this.statsNames.get(i) + ": " + String.valueOf(this.getAllLore().get(i)));
+//            res.add(ChatColor.YELLOW + this.statsNames.get(i) + ": " + String.valueOf(this.getAllLore().get(i)));
+            res.add(String.format("%s%s : %d",ChatColor.YELLOW,this.statsNames.get(i), this.getAllLore().get(i)));
         }
         return res;
     }

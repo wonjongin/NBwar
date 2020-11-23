@@ -211,18 +211,23 @@ public class Money {
         if (moneyYamlRead(sender) < money) {
             sender.sendMessage("돈이 부족합니다.");
         } else {
-            moneyYamlUpdate(sender, moneyYamlRead(sender) - money);
-            moneyYamlUpdate(receiver, moneyYamlRead(receiver) + money);
-            String moneyStr = Integer.toString(money);
-            sender.sendMessage(ChatColor.AQUA + moneyStr + " 달러가 " + receiver.getName() + "에게 보내졌습니다. ");
-            if (msg.equals("null")) {
-                receiver.sendMessage(ChatColor.GREEN + sender.getName() + "가 " + moneyStr + " 달러를 보냈습니다.");
-                getLogger().info(sender.getName() + " sent " + receiver.getName() + " " + moneyStr + " $");
+            if (money >= 0) {
+                moneyYamlUpdate(sender, moneyYamlRead(sender) - money);
+                moneyYamlUpdate(receiver, moneyYamlRead(receiver) + money);
+                String moneyStr = Integer.toString(money);
+                sender.sendMessage(ChatColor.AQUA + moneyStr + " 달러가 " + receiver.getName() + "에게 보내졌습니다. ");
+                if (msg.equals("null")) {
+                    receiver.sendMessage(ChatColor.GREEN + sender.getName() + "가 " + moneyStr + " 달러를 보냈습니다.");
+                    getLogger().info(sender.getName() + " sent " + receiver.getName() + " " + moneyStr + " $");
+                } else {
+                    receiver.sendMessage(ChatColor.GREEN + sender.getName() + "가 " + moneyStr + " 달러를 보냈습니다.");
+                    receiver.sendMessage(ChatColor.GREEN + "송금 메시지: " + msg);
+                    getLogger().info(sender.getName() + " sent " + receiver.getName() + " " + moneyStr + " $ and " + msg);
+                }
             } else {
-                receiver.sendMessage(ChatColor.GREEN + sender.getName() + "가 " + moneyStr + " 달러를 보냈습니다.");
-                receiver.sendMessage(ChatColor.GREEN + "송금 메시지: " + msg);
-                getLogger().info(sender.getName() + " sent " + receiver.getName() + " " + moneyStr + " $ and " + msg);
+                sender.sendMessage(ChatColor.RED + "돈은 양수로 입력해야합니다.");
             }
+
 
         }
     }
