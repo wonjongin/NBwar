@@ -2,6 +2,7 @@ package io.github.wonjongin.nbwar;
 
 import lombok.*;
 import lombok.experimental.Delegate;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -42,7 +43,7 @@ public class LoreStats {
     private int defend = 0; // 방어력
     private int ignoreDefend = 0; // 방어력 무시
     private String uuidStr = uuid.toString();
-//    private String powerString = String.valueOf(this.power); // 공격력
+    //    private String powerString = String.valueOf(this.power); // 공격력
 //    private String criticalPercentString = String.valueOf(this.criticalPercent);
 //    ; // 크리 확률
 //    private String criticalString = String.valueOf(this.critical);
@@ -67,8 +68,8 @@ public class LoreStats {
             "방어력무시"
     ));
 
-    public ArrayList<Integer> getAllLore(){
-       return new ArrayList<>(Arrays.asList(
+    public ArrayList<Integer> getAllLore() {
+        return new ArrayList<>(Arrays.asList(
                 this.power,
                 this.criticalPercent,
                 this.critical,
@@ -87,12 +88,12 @@ public class LoreStats {
             initLoreStats(item);
         }
         List<String> lore = itemMeta.getLore();
-        for (int i=0;i<lore.size();i++) {
-            String str = lore.get(i).replaceAll(patternNumStr,"");
-            getLogger().info("로어str"+str);
+        for (int i = 0; i < lore.size(); i++) {
+            String str = lore.get(i).replaceAll(patternNumStr, "");
+            getLogger().info("로어str" + str);
             if (str.contains("공격력:")) {
                 this.power = Integer.parseInt(str);
-                getLogger().info("공격력"+"::: "+str);
+                getLogger().info("공격력" + "::: " + str);
             } else if (str.contains("크리확률:")) {
                 this.criticalPercent = Integer.parseInt(str);
             } else if (str.contains("크리데미지:")) {
@@ -116,7 +117,7 @@ public class LoreStats {
     public ArrayList<String> toLoreList() {
         ArrayList<String> res = new ArrayList<>();
         for (int i = 0; i < this.getAllLore().size(); i++) {
-            res.add(this.statsNames.get(i) + ": " +String.valueOf(this.getAllLore().get(i)));
+            res.add(ChatColor.YELLOW + this.statsNames.get(i) + ": " + String.valueOf(this.getAllLore().get(i)));
         }
         return res;
     }

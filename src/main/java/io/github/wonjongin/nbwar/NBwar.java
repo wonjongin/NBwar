@@ -7,16 +7,22 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -36,6 +42,7 @@ import static io.github.wonjongin.nbwar.GiveItem.giveItem;
 import static io.github.wonjongin.nbwar.Hardware.checkram;
 import static io.github.wonjongin.nbwar.Money.moneyCommands;
 import static io.github.wonjongin.nbwar.Money.moneySetup;
+import static io.github.wonjongin.nbwar.Op.*;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
 
 
@@ -61,6 +68,10 @@ public class NBwar extends JavaPlugin implements Listener {
         File moneyFile = new File("./plugins/NBwar/Money/Money.yml");
         if (!moneyFile.exists()) {
             createFile("./plugins/NBwar/Money/Money.yml", "{ uuid: money }");
+        }
+        File opFile = new File("./plugins/NBwar/Op.yml");
+        if (!opFile.exists()) {
+            createFile("./plugins/NBwar/Op.yml", "{ uuid: boolean}");
         }
         getServer().getPluginManager().registerEvents(this, this);
         // 이벤트 핸들링 하려면 반드시 필요함
@@ -107,7 +118,11 @@ public class NBwar extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("java")) {
                 sender.sendMessage(ChatColor.GREEN + "Java is programming language!!");
             } else if (args[0].equalsIgnoreCase("power") || args[0].equalsIgnoreCase("p")) {
-                setLorePower(player, args[1]);
+                if (isOpPlayer(player)) {
+                    setLorePower(player, args[1]);
+                } else {
+                    player.sendMessage(ChatColor.RED + "권한이 없습니다.");
+                }
             } else if (args[0].equalsIgnoreCase("state") || args[0].equalsIgnoreCase("st")) {
                 sender.sendMessage(ChatColor.BLACK + "당신의 래벨은 " + player.getLevel() + " 입니다.");
             } else if (args[0].equalsIgnoreCase("critical") || args[0].equalsIgnoreCase("cri")) {
@@ -139,6 +154,8 @@ public class NBwar extends JavaPlugin implements Listener {
 //                sender.sendMessage(ChatColor.GREEN + resRamUsage);
             } else if (args[0].equalsIgnoreCase("dev")) {
                 devCommand(player, args);
+            } else if (args[0].equalsIgnoreCase("op")) {
+                setOp(player, player.getServer().getPlayer(args[1]), Boolean.parseBoolean(args[2]));
             } else {
                 sender.sendMessage(ChatColor.RED + "Command Not Found!!");
             }
@@ -151,6 +168,7 @@ public class NBwar extends JavaPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         moneySetup(player);
+        opSetup(player);
         event.setJoinMessage(ChatColor.AQUA + "Welcome to NBwar!");
         getLogger().info(player.getName() + " came into server!");
         damage = player.getLevel();
@@ -166,22 +184,60 @@ public class NBwar extends JavaPlugin implements Listener {
 
     @EventHandler
     public void PlayerStat(EntityDamageByEntityEvent event) {
-        double plusdamage = event.getDamage() + damage;
-        double minusdamage = event.getDamage() - armor;
-        if (minusdamage < 0) {
-            minusdamage = 0;
+//        double plusdamage = event.getDamage() + damage;
+//        double minusdamage = event.getDamage() - armor;
+//        if (minusdamage < 0) {
+//            minusdamage = 0;
+//        }
+//
+//        if (event.getDamager() instanceof Player) {
+//            Player player = (Player) event.getDamager();
+//            event.setDamage(plusdamage);
+//            player.sendMessage((int) plusdamage + "의 피해를 입혔습니다.");
+//        }
+//
+//        if (event.getEntity() instanceof Player) {
+//            Player player = (Player) event.getEntity();
+//            event.setDamage(minusdamage);
+//            player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
+//        }
+        double totalDamage = 0;
+        boolean loreSender = false;
+        boolean loreReceiver = false;
+        int ignoreDefend = 0;
+        EntityType entityType = event.getEntityType();
+        Player sender = (Player) event.getDamager();
+        Player receiver = (Player) event.getEntity();
+        ItemStack itemOfSender = sender.getInventory().getItemInMainHand();
+        ItemStack itemOfReceiver = receiver.getInventory().getItemInMainHand();
+        ItemMeta itemMetaOfSender = itemOfSender.getItemMeta();
+        ItemMeta itemMetaOfReceiver = itemOfReceiver.getItemMeta();
+
+        try {
+            loreSender = true;
+            LoreStats loreStatsOfSender = new LoreStats().parseToLoreStats(itemOfSender);
+            totalDamage += loreStatsOfSender.getPower();
+            addHealthDouble(sender, sender, (double) loreStatsOfSender.getDrain());
+            ignoreDefend = loreStatsOfSender.getIgnoreDefend();
+        } catch (Exception e) {
+            loreSender = false;
         }
 
-        if (event.getDamager() instanceof Player) {
-            Player player = (Player) event.getDamager();
-            event.setDamage(plusdamage);
-            player.sendMessage((int) plusdamage + "의 피해를 입혔습니다.");
+        try {
+            loreReceiver = true;
+            LoreStats loreStatsOfReceiver = new LoreStats().parseToLoreStats(itemOfReceiver);
+            if (loreStatsOfReceiver.getDefend() - ignoreDefend >= 0) {
+                totalDamage -= loreStatsOfReceiver.getDefend() - ignoreDefend;
+            }
+        } catch (Exception e) {
+            loreReceiver = false;
         }
 
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            event.setDamage(minusdamage);
-            player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
+        if (loreSender || loreReceiver) {
+            event.setDamage(totalDamage);
+        } else {
+            event.setDamage(event.getDamage());
+
         }
     }
 
@@ -190,7 +246,7 @@ public class NBwar extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         ItemStack breakitem = event.getPlayer().getInventory().getItemInMainHand();
-        if(breakitem.getType() != Material.WOOD_AXE && breakitem.getType() != Material.GOLD_AXE ){
+        if (breakitem.getType() != Material.WOOD_AXE && breakitem.getType() != Material.GOLD_AXE) {
             ItemStack itemStack = new ItemStack(block.getType());
             player.sendMessage(ChatColor.GREEN + "Block Num: " + ChatColor.YELLOW + block.getTypeId());
         }
@@ -203,4 +259,6 @@ public class NBwar extends JavaPlugin implements Listener {
         // player.sendMessage(ChatColor.GREEN + "Get block twice!!");
 
     }
+
+
 }

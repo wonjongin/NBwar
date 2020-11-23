@@ -1,7 +1,9 @@
 package io.github.wonjongin.nbwar;
 
+import org.bukkit.entity.Player;
 import org.yaml.snakeyaml.Yaml;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Basic {
@@ -18,4 +20,5 @@ public class Basic {
         Map<String, Object> obj = yaml.load(str);
         return true;
     }
+
 }

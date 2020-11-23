@@ -29,7 +29,7 @@ public class ControlLoreStats {
         }
         List<String> lore = itemMeta.getLore();
         for (int i = 0; i < loreStats.getStatsNames().size(); i++) {
-            lore.add(loreStats.getStatsNames().get(i) + ": " + "0");
+            lore.add(ChatColor.YELLOW+loreStats.getStatsNames().get(i) + ": " + "0");
         }
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
