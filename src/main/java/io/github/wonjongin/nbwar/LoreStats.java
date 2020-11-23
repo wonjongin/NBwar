@@ -18,9 +18,9 @@ import static org.bukkit.Bukkit.getLogger;
 
 @Data
 @ToString
-@EqualsAndHashCode
 @Getter
 @Setter
+@EqualsAndHashCode
 @RequiredArgsConstructor
 public class LoreStats {
     /*
@@ -42,20 +42,21 @@ public class LoreStats {
     private int defend = 0; // 방어력
     private int ignoreDefend = 0; // 방어력 무시
     private String uuidStr = uuid.toString();
-    private String powerString = String.valueOf(this.power); // 공격력
-    private String criticalPercentString = String.valueOf(this.criticalPercent);
-    ; // 크리 확률
-    private String criticalString = String.valueOf(this.critical);
-    ; // 크리 데미지
-    private String healthString = String.valueOf(this.health);
-    ; // 체력
-    private String drainString = String.valueOf(this.drain);
-    ; // 피흡
-    private String defendString = String.valueOf(this.defend);
-    ; // 방어력
-    private String ignoreDefendString = String.valueOf(this.ignoreDefend);
-    ; // 방어력 무시
-
+//    private String powerString = String.valueOf(this.power); // 공격력
+//    private String criticalPercentString = String.valueOf(this.criticalPercent);
+//    ; // 크리 확률
+//    private String criticalString = String.valueOf(this.critical);
+//    ; // 크리 데미지
+//    private String healthString = String.valueOf(this.health);
+//    ; // 체력
+//    private String drainString = String.valueOf(this.drain);
+//    ; // 피흡
+//    private String defendString = String.valueOf(this.defend);
+//    ; // 방어력
+//    private String ignoreDefendString = String.valueOf(this.ignoreDefend);
+//    ; // 방어력 무시
+    @Getter
+    @Setter
     private ArrayList<String> statsNames = new ArrayList<>(Arrays.asList(
             "공격력",
             "크리확률",
@@ -65,49 +66,47 @@ public class LoreStats {
             "방어력",
             "방어력무시"
     ));
-    private ArrayList<Integer> allLore = new ArrayList<>(Arrays.asList(
-            this.power,
-            this.criticalPercent,
-            this.critical,
-            this.health,
-            this.drain,
-            this.defend,
-            this.ignoreDefend
-    ));
+
+    public ArrayList<Integer> getAllLore(){
+       return new ArrayList<>(Arrays.asList(
+                this.power,
+                this.criticalPercent,
+                this.critical,
+                this.health,
+                this.drain,
+                this.defend,
+                this.ignoreDefend
+        ));
+    }
 
     public LoreStats parseToLoreStats(ItemStack item) {
-        Pattern patternNum = Pattern.compile("^[0-9|\\.]*$");
+        String patternNumStr = "[^0-9]";
+        Pattern patternNum = Pattern.compile("^[0-9]*$");
         ItemMeta itemMeta = item.getItemMeta();
         if (!itemMeta.hasLore()) {
             initLoreStats(item);
         }
         List<String> lore = itemMeta.getLore();
         for (int i=0;i<lore.size();i++) {
-            String str = lore.get(i);
+            String str = lore.get(i).replaceAll(patternNumStr,"");
+            getLogger().info("로어str"+str);
             if (str.contains("공격력:")) {
-                Matcher matcherNum = patternNum.matcher(str);
-                this.power = Integer.parseInt(str.substring(matcherNum.start(), matcherNum.end()));
-                getLogger().info("공격력"+"::: "+str.substring(matcherNum.start(), matcherNum.end()));
+                this.power = Integer.parseInt(str);
+                getLogger().info("공격력"+"::: "+str);
             } else if (str.contains("크리확률:")) {
-                Matcher matcherNum = patternNum.matcher(str);
-                this.criticalPercent = Integer.parseInt(str.substring(matcherNum.start(), matcherNum.end()));
+                this.criticalPercent = Integer.parseInt(str);
             } else if (str.contains("크리데미지:")) {
-                Matcher matcherNum = patternNum.matcher(str);
-                this.critical = Integer.parseInt(str.substring(matcherNum.start(), matcherNum.end()));
+                this.critical = Integer.parseInt(str);
             } else if (str.contains("체력:")) {
-                Matcher matcherNum = patternNum.matcher(str);
-                this.health = Integer.parseInt(str.substring(matcherNum.start(), matcherNum.end()));
+                this.health = Integer.parseInt(str);
             } else if (str.contains("피흡:")) {
-                Matcher matcherNum = patternNum.matcher(str);
-                this.drain = Integer.parseInt(str.substring(matcherNum.start(), matcherNum.end()));
+                this.drain = Integer.parseInt(str);
             } else if (str.contains("방어력:")) {
-                Matcher matcherNum = patternNum.matcher(str);
-                this.defend = Integer.parseInt(str.substring(matcherNum.start(), matcherNum.end()));
+                this.defend = Integer.parseInt(str);
             } else if (str.contains("방어력무시:")) {
-                Matcher matcherNum = patternNum.matcher(str);
-                this.ignoreDefend = Integer.parseInt(str.substring(matcherNum.start(), matcherNum.end()));
+                this.ignoreDefend = Integer.parseInt(str);
             } else {
-                return null;
+                continue;
             }
 
         }
@@ -116,13 +115,17 @@ public class LoreStats {
 
     public ArrayList<String> toLoreList() {
         ArrayList<String> res = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
-            res.add(this.getStatsNames().get(i) + ": " + this.getPowerString());
+        for (int i = 0; i < this.getAllLore().size(); i++) {
+            res.add(this.statsNames.get(i) + ": " +String.valueOf(this.getAllLore().get(i)));
         }
         return res;
     }
 
-    public int getPower() {
-        return power;
-    }
+//    public int getPower() {
+//        return power;
+//    }
+//
+//    public void setPower(int power) {
+//        this.power = power;
+//    }
 }

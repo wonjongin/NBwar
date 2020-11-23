@@ -1,10 +1,10 @@
 package io.github.wonjongin.nbwar;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,27 +12,20 @@ import java.util.List;
 public class ControlLoreStats {
     public static void setLorePower(Player player, String powerStr) {
         int power = Integer.parseInt(powerStr);
-        player.sendMessage("아이템 공격력을 " + power + "로 설정을 시도합니다...");
-        player.sendMessage("손에 든 아이템 불러오는 중...");
         ItemStack item = player.getInventory().getItemInMainHand();
-        player.sendMessage("아이템 속성 불러오는 중...");
         ItemMeta itemMeta = item.getItemMeta();
-        player.sendMessage("아이템 속성 읽는 중...");
         LoreStats loreStats = new LoreStats().parseToLoreStats(item);
-        player.sendMessage("1값: "+String.valueOf(loreStats.getPower()));
-        for (int i = 0; i < loreStats.getAllLore().size(); i++) {
-            player.sendMessage("값: "+String.valueOf(loreStats.getAllLore().get(i)));
-        }
-        player.sendMessage("아이템 속성 설정 중...");
         loreStats.setPower(power);
         itemMeta.setLore(loreStats.toLoreList());
+        item.setItemMeta(itemMeta);
+        player.sendMessage(ChatColor.YELLOW + "공격력이 " + loreStats.getPower() + "(으)로 설정되었습니다.");
     }
 
     public static void initLoreStats(ItemStack item) {
         LoreStats loreStats = new LoreStats();
         ItemMeta itemMeta = item.getItemMeta();
         if (!itemMeta.hasLore()) {
-            itemMeta.setLore(Arrays.asList(""));
+            itemMeta.setLore(Arrays.asList("init"));
         }
         List<String> lore = itemMeta.getLore();
         for (int i = 0; i < loreStats.getStatsNames().size(); i++) {

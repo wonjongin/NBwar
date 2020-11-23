@@ -84,7 +84,7 @@ public class NBwar extends JavaPlugin implements Listener {
                     "item(it) - 아이템 관리 [얻기, 지우기...]",
                     "ram - 램 정보 보기 ",
                     "money(mn) - 돈 제어",
-                    "power(p) - 공격력 제어 (준비중)",
+                    "power(p) - 공격력 제어",
                     "state(st) - 레벨 제어 (준비중)",
                     "critical(cri) - 크리티컬 제어(준비중)",
                     "drain(dr) - 체력흡수 제어(준비중)",
@@ -107,7 +107,6 @@ public class NBwar extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("java")) {
                 sender.sendMessage(ChatColor.GREEN + "Java is programming language!!");
             } else if (args[0].equalsIgnoreCase("power") || args[0].equalsIgnoreCase("p")) {
-                sender.sendMessage(ChatColor.GREEN + "당신의 파워는 " + damage + " 입니다.");
                 setLorePower(player, args[1]);
             } else if (args[0].equalsIgnoreCase("state") || args[0].equalsIgnoreCase("st")) {
                 sender.sendMessage(ChatColor.BLACK + "당신의 래벨은 " + player.getLevel() + " 입니다.");
