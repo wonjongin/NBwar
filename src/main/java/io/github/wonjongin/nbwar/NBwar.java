@@ -26,6 +26,7 @@ import java.lang.management.MemoryUsage;
 import java.util.ArrayList;
 
 import static io.github.wonjongin.nbwar.Basic.isInteger;
+import static io.github.wonjongin.nbwar.ControlLoreStats.setLorePower;
 import static io.github.wonjongin.nbwar.ControlPlayerStats.addHealthDouble;
 import static io.github.wonjongin.nbwar.ControlPlayerStats.healthCommands;
 import static io.github.wonjongin.nbwar.Develop.devCommand;
@@ -107,6 +108,7 @@ public class NBwar extends JavaPlugin implements Listener {
                 sender.sendMessage(ChatColor.GREEN + "Java is programming language!!");
             } else if (args[0].equalsIgnoreCase("power") || args[0].equalsIgnoreCase("p")) {
                 sender.sendMessage(ChatColor.GREEN + "당신의 파워는 " + damage + " 입니다.");
+                setLorePower(player, args[1]);
             } else if (args[0].equalsIgnoreCase("state") || args[0].equalsIgnoreCase("st")) {
                 sender.sendMessage(ChatColor.BLACK + "당신의 래벨은 " + player.getLevel() + " 입니다.");
             } else if (args[0].equalsIgnoreCase("critical") || args[0].equalsIgnoreCase("cri")) {

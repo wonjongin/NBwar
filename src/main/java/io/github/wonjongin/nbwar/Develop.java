@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.SplittableRandom;
 
@@ -112,6 +113,9 @@ public class Develop {
         }
     }public static void addLore(Player player, String str) {
         ItemMeta itemMeta = player.getInventory().getItemInMainHand().getItemMeta();
+        if(!itemMeta.hasLore()){
+            itemMeta.setLore(Arrays.asList(""));
+        }
         List<String> lore = itemMeta.getLore();
         lore.add(str);
         itemMeta.setLore(lore);
