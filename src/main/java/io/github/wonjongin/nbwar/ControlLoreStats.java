@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ControlLoreStats {
+    @Deprecated
     public static void setLorePower(Player player, String powerStr) {
         int power = Integer.parseInt(powerStr);
         ItemStack item = player.getInventory().getItemInMainHand();
@@ -21,6 +22,30 @@ public class ControlLoreStats {
         itemMeta.setLore(loreStats.toLoreList());
         item.setItemMeta(itemMeta);
         player.sendMessage(ChatColor.YELLOW + "공격력이 " + loreStats.getPower() + "(으)로 설정되었습니다.");
+    }
+
+    public static void setLoreMaster(Player player, String stat, String valueStr){
+        int value = Integer.parseInt(valueStr);
+        ItemStack item = player.getInventory().getItemInMainHand();
+        ItemMeta itemMeta = item.getItemMeta();
+        LoreStats loreStats = new LoreStats().parseToLoreStats(item);
+        String headMsg = "";
+        switch (stat){
+            case "power":
+                loreStats.setPower(value);
+                headMsg = "공격력이";
+                break;
+            case "defend":
+                loreStats.setDefend(value);
+                headMsg = "방어력이";
+                break;
+            default:
+                return;
+        }
+
+        itemMeta.setLore(loreStats.toLoreList());
+        item.setItemMeta(itemMeta);
+        player.sendMessage(ChatColor.YELLOW + String.format("%s %d (으)로 설정되었습니다.", headMsg,value));
     }
     public static void setNBTPower(Player player, String powerStr){
         int power = Integer.parseInt(powerStr);

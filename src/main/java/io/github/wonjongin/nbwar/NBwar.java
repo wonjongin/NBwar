@@ -32,7 +32,7 @@ import java.lang.management.MemoryUsage;
 import java.util.ArrayList;
 
 import static io.github.wonjongin.nbwar.Basic.isInteger;
-import static io.github.wonjongin.nbwar.ControlLoreStats.setLorePower;
+import static io.github.wonjongin.nbwar.ControlLoreStats.setLoreMaster;
 import static io.github.wonjongin.nbwar.ControlPlayerStats.addHealthDouble;
 import static io.github.wonjongin.nbwar.ControlPlayerStats.healthCommands;
 import static io.github.wonjongin.nbwar.Develop.devCommand;
@@ -119,7 +119,7 @@ public class NBwar extends JavaPlugin implements Listener {
                 sender.sendMessage(ChatColor.GREEN + "Java is programming language!!");
             } else if (args[0].equalsIgnoreCase("power") || args[0].equalsIgnoreCase("p")) {
                 if (isOpPlayer(player)) {
-                    setLorePower(player, args[1]);
+                    setLoreMaster(player, "power", args[1]);
                 } else {
                     player.sendMessage(ChatColor.RED + "권한이 없습니다.");
                 }
@@ -130,7 +130,12 @@ public class NBwar extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("drain") || args[0].equalsIgnoreCase("dr")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
             } else if (args[0].equalsIgnoreCase("defend") || args[0].equalsIgnoreCase("df")) {
-                sender.sendMessage(ChatColor.GREEN + "준비중...");
+                if (isOpPlayer(player)) {
+                    setLoreMaster(player, "defend", args[1]);
+                    // setLoreDefend(player, args[1]);
+                } else {
+                    player.sendMessage(ChatColor.RED + "권한이 없습니다.");
+                }
             } else if (args[0].equalsIgnoreCase("heal") || args[0].equalsIgnoreCase("hl")) {
                 healthCommands(player, args);
             } else if (args[0].equalsIgnoreCase("item") || args[0].equalsIgnoreCase("it")) {
@@ -155,7 +160,7 @@ public class NBwar extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("dev")) {
                 devCommand(player, args);
             } else if (args[0].equalsIgnoreCase("op")) {
-                setOp(player, player.getServer().getPlayer(args[1]), Boolean.parseBoolean(args[2]));
+                setOp(player, player.getServer().getPlayer(args[1]), args[2]);
             } else {
                 sender.sendMessage(ChatColor.RED + "Command Not Found!!");
             }
@@ -205,13 +210,11 @@ public class NBwar extends JavaPlugin implements Listener {
         boolean loreSender = false;
         boolean loreReceiver = false;
         int ignoreDefend = 0;
-        EntityType entityType = event.getEntityType();
+
         Player sender = (Player) event.getDamager();
         Player receiver = (Player) event.getEntity();
         ItemStack itemOfSender = sender.getInventory().getItemInMainHand();
         ItemStack itemOfReceiver = receiver.getInventory().getItemInMainHand();
-        ItemMeta itemMetaOfSender = itemOfSender.getItemMeta();
-        ItemMeta itemMetaOfReceiver = itemOfReceiver.getItemMeta();
 
         try {
             loreSender = true;
@@ -227,7 +230,9 @@ public class NBwar extends JavaPlugin implements Listener {
             loreReceiver = true;
             LoreStats loreStatsOfReceiver = new LoreStats().parseToLoreStats(itemOfReceiver);
             if (loreStatsOfReceiver.getDefend() - ignoreDefend >= 0) {
-                totalDamage -= loreStatsOfReceiver.getDefend() - ignoreDefend;
+                receiver.sendMessage(ChatColor.GREEN+String.format("%d (을)를 방어했습니다.", loreStatsOfReceiver.getDefend()));
+                totalDamage -= loreStatsOfReceiver.getDefend();
+                totalDamage += ignoreDefend;
             }
         } catch (Exception e) {
             loreReceiver = false;

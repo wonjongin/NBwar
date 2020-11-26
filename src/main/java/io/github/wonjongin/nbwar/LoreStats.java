@@ -65,7 +65,7 @@ public class LoreStats {
             "체력",
             "피흡",
             "방어력",
-            "방어력무시"
+            "방어무시"
     ));
 
     public ArrayList<Integer> getAllLore() {
@@ -90,22 +90,28 @@ public class LoreStats {
         List<String> lore = itemMeta.getLore();
         for (int i = 0; i < lore.size(); i++) {
             String str = lore.get(i).replaceAll(patternNumStr, "");
-            getLogger().info("로어str: " + str);
+            // getLogger().info("로어str: " + str);
             if (lore.get(i).contains(statsNames.get(0))) {
                 this.power = Integer.parseInt(str);
-                getLogger().info("공격력" + "::: " + str);
+                getLogger().info(statsNames.get(0) + ": " + str);
             } else if (lore.get(i).contains(statsNames.get(1))) {
                 this.criticalPercent = Integer.parseInt(str);
+                getLogger().info(statsNames.get(1) + ": " + str);
             } else if (lore.get(i).contains(statsNames.get(2))) {
                 this.critical = Integer.parseInt(str);
+                getLogger().info(statsNames.get(2) + ": " + str);
             } else if (lore.get(i).contains(statsNames.get(3))) {
                 this.health = Integer.parseInt(str);
+                getLogger().info(statsNames.get(3) + ": " + str);
             } else if (lore.get(i).contains(statsNames.get(4))) {
                 this.drain = Integer.parseInt(str);
+                getLogger().info(statsNames.get(4) + ": " + str);
             } else if (lore.get(i).contains(statsNames.get(5))) {
                 this.defend = Integer.parseInt(str);
+                getLogger().info(statsNames.get(5) + ": " + str);
             } else if (lore.get(i).contains(statsNames.get(6))) {
                 this.ignoreDefend = Integer.parseInt(str);
+                getLogger().info(statsNames.get(6) + ": " + str);
             } else {
                 continue;
             }
@@ -118,7 +124,7 @@ public class LoreStats {
         ArrayList<String> res = new ArrayList<>();
         for (int i = 0; i < this.getAllLore().size(); i++) {
 //            res.add(ChatColor.YELLOW + this.statsNames.get(i) + ": " + String.valueOf(this.getAllLore().get(i)));
-            res.add(String.format("%s%s : %d",ChatColor.YELLOW,this.statsNames.get(i), this.getAllLore().get(i)));
+            res.add(String.format("%s%s : %d",ChatColor.GOLD,this.statsNames.get(i), this.getAllLore().get(i)));
         }
         return res;
     }

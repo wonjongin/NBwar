@@ -13,7 +13,7 @@ import static io.github.wonjongin.nbwar.FileIO.readFileOnce;
 import static org.bukkit.Bukkit.getLogger;
 
 public class Op {
-    public static boolean isOpPlayer(Player player){
+    public static boolean isOpPlayer(Player player) {
         String uuid = player.getUniqueId().toString();
         Yaml yaml = new Yaml();
         InputStream inputStream = null;
@@ -22,9 +22,10 @@ public class Op {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Map<String,Boolean> obj = yaml.load(inputStream);
+        Map<String, Boolean> obj = yaml.load(inputStream);
         return obj.get(uuid);
     }
+
     public static void opSetup(Player player) {
         String uuid = player.getUniqueId().toString();
         Yaml yaml = new Yaml();
@@ -50,8 +51,18 @@ public class Op {
             }
         }
     }
-    public static void setOp(Player sender, Player receiver, boolean isOp){
-        if(sender.isOp()||isOpPlayer(sender)){
+
+    public static void setOp(Player sender, Player receiver, String isOpStr) {
+        Boolean isOp;
+        if (isOpStr.equalsIgnoreCase("1")) {
+            isOp = true;
+        } else if (isOpStr.equalsIgnoreCase("0")) {
+            isOp = false;
+        } else {
+            sender.sendMessage(ChatColor.RED + "값은 0 또는 1 이어야 합니다.");
+            return;
+        }
+        if (sender.isOp() || isOpPlayer(sender)) {
             String uuid = receiver.getUniqueId().toString();
             Yaml yaml = new Yaml();
             InputStream inputStream = null;
@@ -67,8 +78,8 @@ public class Op {
                     writer = new FileWriter("./plugins/NBwar/Op.yml");
                     obj.put(uuid, isOp);
                     yaml.dump(obj, writer);
-                    sender.sendMessage(ChatColor.YELLOW+receiver.getName()+"에게 오피를 "+String.valueOf(isOp)+"로 설정했습니다. ");
-                    receiver.sendMessage(ChatColor.YELLOW+sender.getName()+"(이)가 오피를 "+String.valueOf(isOp)+"로 설정했습니다. ");
+                    sender.sendMessage(ChatColor.YELLOW + receiver.getName() + "에게 오피를 " + String.valueOf(isOp) + "로 설정했습니다. ");
+                    receiver.sendMessage(ChatColor.YELLOW + sender.getName() + "(이)가 오피를 " + String.valueOf(isOp) + "로 설정했습니다. ");
                     getLogger().info("Op of " + receiver.getName() + " is set up");
                     getLogger().info("UUID is " + uuid);
                 } catch (IOException e) {
