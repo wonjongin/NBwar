@@ -40,9 +40,9 @@ public class ControlPlayerStats {
             if (args.length < 3) {
                 player.sendMessage(ChatColor.RED + "유저이름과 양을 입력하세요");
             } else if (args.length == 3) {
-                addHealthDouble(player, player, Double.parseDouble(args[2]));
+                addHealthDouble(player, player, Double.parseDouble(args[2]), 1);
             } else {
-                addHealthDouble(player, Bukkit.getServer().getPlayer(args[2]), Double.parseDouble(args[3]));
+                addHealthDouble(player, Bukkit.getServer().getPlayer(args[2]), Double.parseDouble(args[3]), 2);
             }
         } else if (args[1].equalsIgnoreCase("full") || args[1].equalsIgnoreCase("f")) {
             fullHealth(player);
@@ -51,7 +51,8 @@ public class ControlPlayerStats {
         }
     }
 
-    public static void addHealthDouble(Player sender, Player receiver, double amountofHeal) {
+    public static void addHealthDouble(Player sender, Player receiver, double amountofHeal, int mode) {
+        // mode - 2: 둘다 메시지, 1: 피흡용
         double maxHealth = receiver.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
         double initialHealth = receiver.getHealth();
         double finalHealth = initialHealth + amountofHeal;
@@ -60,13 +61,23 @@ public class ControlPlayerStats {
             amountofHeal = maxHealth - initialHealth;
         }
         receiver.setHealth(finalHealth);
-        sender.sendMessage(ChatColor.GOLD + receiver.getName() + "의 체력을 " + Double.toString(amountofHeal) + " 만큼 더했습니다.");
-        receiver.sendMessage(ChatColor.YELLOW + sender.getName() + "이 당신의 체력을 " + Double.toString(amountofHeal) + " 만큼 더했습니다.");
+        if (mode == 1) {
+            sender.sendMessage(ChatColor.YELLOW+"체력이 "+amountofHeal+" 만큼 더해졌습니다.");
+        } else if (mode == 2){
+            sender.sendMessage(ChatColor.GOLD + receiver.getName() + "의 체력을 " + amountofHeal + " 만큼 더했습니다.");
+            receiver.sendMessage(ChatColor.YELLOW + sender.getName() + "이 당신의 체력을 " + amountofHeal + " 만큼 더했습니다.");
+        }
     }
-    public static void fullHealth(Player player){
-        double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-        player.setHealth(maxHealth);
-        player.sendMessage(ChatColor.GREEN+"생명력을 모두 채웠습니다.");
+
+    public static void fullHealth(Player player) {
+        String name = player.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
+        if (name.equals("§4§lLeo§6§lni§f§ldas")) {
+            double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+            player.setHealth(maxHealth);
+            player.sendMessage(ChatColor.GREEN + "생명력을 모두 채웠습니다.");
+        } else {
+            player.sendMessage("§4§lLeo§6§lni§f§ldas" + ChatColor.RED + " 를 들고 하십쇼");
+        }
     }
 
     public static void setLimitHealth(Player sender, Player receiver, double value) {

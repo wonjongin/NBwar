@@ -3,9 +3,7 @@ package io.github.wonjongin.nbwar;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,11 +11,10 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import static io.github.wonjongin.nbwar.Basic.isInteger;
-import static io.github.wonjongin.nbwar.FileIO.createFile;
 import static io.github.wonjongin.nbwar.FileIO.readFileOnce;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
 import static org.bukkit.Bukkit.getLogger;
@@ -232,7 +229,7 @@ public class Money {
         }
     }
 
-    public static int[] moneyCounter(int totalMoney) {
+    public static HashMap<String, Integer> moneyCounter(int totalMoney) {
         int d100 = 0; // 100 달러
         int d50 = 0;
         int d20 = 0;
@@ -242,34 +239,44 @@ public class Money {
         int d1 = 0;
         int tmpMoney = totalMoney;
         while (tmpMoney >= 100) {
-            tmpMoney = tmpMoney - 100;
+            tmpMoney -= 100;
             d100++;
         }
         while (tmpMoney >= 50) {
-            tmpMoney = tmpMoney - 50;
+            tmpMoney -= 50;
             d50++;
         }
         while (tmpMoney >= 20) {
-            tmpMoney = tmpMoney - 20;
+            tmpMoney -= 20;
             d20++;
         }
         while (tmpMoney >= 10) {
-            tmpMoney = tmpMoney - 10;
+            tmpMoney -= 10;
             d10++;
         }
         while (tmpMoney >= 5) {
-            tmpMoney = tmpMoney - 5;
+            tmpMoney -= 5;
             d5++;
         }
         while (tmpMoney >= 2) {
-            tmpMoney = tmpMoney - 2;
+            tmpMoney -= 2;
             d2++;
         }
         while (tmpMoney >= 1) {
-            tmpMoney = tmpMoney - 1;
+            tmpMoney -= 1;
             d1++;
         }
 
-        return new int[]{d100, d50, d20, d10, d5, d2, d1};
+        final int[] res = {d100, d50, d20, d10, d5, d2, d1};
+        // return new int[]{d100, d50, d20, d10, d5, d2, d1};
+        return new HashMap<String, Integer>(){{
+           put("d100", res[0]);
+           put("d50", res[1]);
+           put("d20", res[2]);
+           put("d10", res[3]);
+           put("d5", res[4]);
+           put("d2", res[5]);
+           put("d1", res[6]);
+        }};
     }
 }

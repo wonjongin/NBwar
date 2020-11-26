@@ -1,6 +1,5 @@
 package io.github.wonjongin.nbwar;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,26 +8,16 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryMXBean;
-import java.lang.management.MemoryUsage;
 import java.util.ArrayList;
 
 import static io.github.wonjongin.nbwar.Basic.isInteger;
@@ -73,6 +62,10 @@ public class NBwar extends JavaPlugin implements Listener {
         if (!opFile.exists()) {
             createFile("./plugins/NBwar/Op.yml", "{ uuid: boolean}");
         }
+        File helpFile = new File("./plugins/NBwar/help/init.txt");
+        if (!helpFile.exists()) {
+            createFile("./plugins/NBwar/help/init.txt", "Help messages of NBwar");
+        }
         getServer().getPluginManager().registerEvents(this, this);
         // 이벤트 핸들링 하려면 반드시 필요함
         getLogger().info("EventHandler is enabled");
@@ -92,15 +85,15 @@ public class NBwar extends JavaPlugin implements Listener {
             String[] commandsHelp = {
                     "Help!! Type /n <page> ",
                     "info - 플러그인 정보 ",
-                    "item(it) - 아이템 관리 [얻기, 지우기...]",
-                    "ram - 램 정보 보기 ",
                     "money(mn) - 돈 제어",
+                    "heal(hl) - 체력 제어(준비중)",
                     "power(p) - 공격력 제어",
+                    "defend(df) - 방어력 제어",
+                    "drain(dr) - 체력흡수 제어(준비중)",
                     "state(st) - 레벨 제어 (준비중)",
                     "critical(cri) - 크리티컬 제어(준비중)",
-                    "drain(dr) - 체력흡수 제어(준비중)",
-                    "defend(df) - 방어력 제어(준비중)",
-                    "heal - 체력 제어(준비중)",
+                    "item(it) - 아이템 관리 [얻기, 지우기...]",
+                    "ram - 램 정보 보기 ",
             };
             if (args.length == 0) {
                 sender.sendMessage(ChatColor.RED + "Type the command to execute.");
@@ -118,24 +111,16 @@ public class NBwar extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("java")) {
                 sender.sendMessage(ChatColor.GREEN + "Java is programming language!!");
             } else if (args[0].equalsIgnoreCase("power") || args[0].equalsIgnoreCase("p")) {
-                if (isOpPlayer(player)) {
-                    setLoreMaster(player, "power", args[1]);
-                } else {
-                    player.sendMessage(ChatColor.RED + "권한이 없습니다.");
-                }
+                setLoreMaster(player, "power", args[1]);
             } else if (args[0].equalsIgnoreCase("state") || args[0].equalsIgnoreCase("st")) {
                 sender.sendMessage(ChatColor.BLACK + "당신의 래벨은 " + player.getLevel() + " 입니다.");
             } else if (args[0].equalsIgnoreCase("critical") || args[0].equalsIgnoreCase("cri")) {
                 sender.sendMessage(ChatColor.GREEN + "준비중...");
             } else if (args[0].equalsIgnoreCase("drain") || args[0].equalsIgnoreCase("dr")) {
-                sender.sendMessage(ChatColor.GREEN + "준비중...");
+                setLoreMaster(player, "drain", args[1]);
             } else if (args[0].equalsIgnoreCase("defend") || args[0].equalsIgnoreCase("df")) {
-                if (isOpPlayer(player)) {
-                    setLoreMaster(player, "defend", args[1]);
-                    // setLoreDefend(player, args[1]);
-                } else {
-                    player.sendMessage(ChatColor.RED + "권한이 없습니다.");
-                }
+                setLoreMaster(player, "defend", args[1]);
+                // setLoreDefend(player, args[1]);
             } else if (args[0].equalsIgnoreCase("heal") || args[0].equalsIgnoreCase("hl")) {
                 healthCommands(player, args);
             } else if (args[0].equalsIgnoreCase("item") || args[0].equalsIgnoreCase("it")) {
@@ -207,33 +192,39 @@ public class NBwar extends JavaPlugin implements Listener {
 //            player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
 //        }
         double totalDamage = 0;
+        boolean receiverisPlayer = event.getEntityType() == EntityType.PLAYER;
         boolean loreSender = false;
         boolean loreReceiver = false;
         int ignoreDefend = 0;
 
         Player sender = (Player) event.getDamager();
-        Player receiver = (Player) event.getEntity();
+
         ItemStack itemOfSender = sender.getInventory().getItemInMainHand();
-        ItemStack itemOfReceiver = receiver.getInventory().getItemInMainHand();
+
 
         try {
             loreSender = true;
             LoreStats loreStatsOfSender = new LoreStats().parseToLoreStats(itemOfSender);
             totalDamage += loreStatsOfSender.getPower();
-            addHealthDouble(sender, sender, (double) loreStatsOfSender.getDrain());
+            addHealthDouble(sender, sender, (double) loreStatsOfSender.getDrain(),1);
             ignoreDefend = loreStatsOfSender.getIgnoreDefend();
         } catch (Exception e) {
             loreSender = false;
         }
 
         try {
-            loreReceiver = true;
-            LoreStats loreStatsOfReceiver = new LoreStats().parseToLoreStats(itemOfReceiver);
-            if (loreStatsOfReceiver.getDefend() - ignoreDefend >= 0) {
-                receiver.sendMessage(ChatColor.GREEN+String.format("%d (을)를 방어했습니다.", loreStatsOfReceiver.getDefend()));
-                totalDamage -= loreStatsOfReceiver.getDefend();
-                totalDamage += ignoreDefend;
+            if (receiverisPlayer) {
+                Player receiver = (Player) event.getEntity();
+                ItemStack itemOfReceiver = receiver.getInventory().getItemInMainHand();
+                loreReceiver = true;
+                LoreStats loreStatsOfReceiver = new LoreStats().parseToLoreStats(itemOfReceiver);
+                if (loreStatsOfReceiver.getDefend() - ignoreDefend >= 0) {
+                    receiver.sendMessage(ChatColor.GREEN + String.format("%d (을)를 방어했습니다.", loreStatsOfReceiver.getDefend()));
+                    totalDamage -= loreStatsOfReceiver.getDefend();
+                    totalDamage += ignoreDefend;
+                }
             }
+            loreReceiver = true;
         } catch (Exception e) {
             loreReceiver = false;
         }

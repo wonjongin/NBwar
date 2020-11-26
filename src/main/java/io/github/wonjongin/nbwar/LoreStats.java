@@ -14,6 +14,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static io.github.wonjongin.nbwar.ControlLoreStats.getColorOfItem;
 import static io.github.wonjongin.nbwar.ControlLoreStats.initLoreStats;
 import static org.bukkit.Bukkit.getLogger;
 
@@ -89,7 +90,7 @@ public class LoreStats {
         }
         List<String> lore = itemMeta.getLore();
         for (int i = 0; i < lore.size(); i++) {
-            String str = lore.get(i).replaceAll(patternNumStr, "");
+            String str = lore.get(i).replaceAll("§.","").replaceAll(patternNumStr, "");
             // getLogger().info("로어str: " + str);
             if (lore.get(i).contains(statsNames.get(0))) {
                 this.power = Integer.parseInt(str);
@@ -125,6 +126,14 @@ public class LoreStats {
         for (int i = 0; i < this.getAllLore().size(); i++) {
 //            res.add(ChatColor.YELLOW + this.statsNames.get(i) + ": " + String.valueOf(this.getAllLore().get(i)));
             res.add(String.format("%s%s : %d",ChatColor.GOLD,this.statsNames.get(i), this.getAllLore().get(i)));
+        }
+        return res;
+    }
+    public ArrayList<String> toLoreList(String color) {
+        ArrayList<String> res = new ArrayList<>();
+        for (int i = 0; i < this.getAllLore().size(); i++) {
+//            res.add(ChatColor.YELLOW + this.statsNames.get(i) + ": " + String.valueOf(this.getAllLore().get(i)));
+            res.add(String.format("%s%s : %d",color,this.statsNames.get(i), this.getAllLore().get(i)));
         }
         return res;
     }

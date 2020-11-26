@@ -16,6 +16,7 @@ import java.util.SplittableRandom;
 
 import static io.github.wonjongin.nbwar.Basic.isInteger;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
+import static org.bukkit.Bukkit.getLogger;
 
 public class Develop {
     public static void devCommand(Player player, String[] args) {
@@ -28,6 +29,7 @@ public class Develop {
                 "lore(l) - 로어보기",
                 "addlore(al) - 로어추가",
                 "loreStats(ls) - 로어스탯보기",
+                "setName(sn) - 이름 설정(색상은&)",
                 "NBT(nbt) - NBT 보기",
         };
         if (args.length == 1) {
@@ -47,8 +49,10 @@ public class Develop {
             addLore(player, args[2]);
         } else if (args[1].equalsIgnoreCase("loreStats") || args[1].equalsIgnoreCase("ls")) {
             viewLoreStats(player);
-        }else if (args[1].equalsIgnoreCase("NBT") || args[1].equalsIgnoreCase("nbt")) {
+        } else if (args[1].equalsIgnoreCase("NBT") || args[1].equalsIgnoreCase("nbt")) {
             viewNBT(player);
+        } else if (args[1].equalsIgnoreCase("test") || args[1].equalsIgnoreCase("tt")) {
+            viewTest(player);
         } else {
             player.sendMessage(ChatColor.RED + "Command Not Found!");
         }
@@ -157,5 +161,25 @@ public class Develop {
         player.sendMessage("방어력 : " + loreStats.getDefend());
         player.sendMessage("방어력무시 : " + loreStats.getIgnoreDefend());
 
+    }
+
+    public static void viewTest(Player player) {
+        player.sendMessage("§bHello");
+        String name = player.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
+        player.sendMessage(name);
+        getLogger().info(name);
+        if (name.equals("JacktheRipper")) {
+            player.sendMessage(ChatColor.GREEN + "is JacktheRipper not color code");
+        } else if(name.equals("&8&lJack&7&lthe&f&lRipper")){
+            player.sendMessage(ChatColor.GREEN+"엠퍼센트");
+        } else if(name.equals("§8§lJack§7§lthe§f§lRipper")){
+            player.sendMessage(ChatColor.GREEN+"옵션6");
+        }
+    }
+    public static void setName(Player player, String str){
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(str.replace("&","§"));
+        itemStack.setItemMeta(itemMeta);
     }
 }
