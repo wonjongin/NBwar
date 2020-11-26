@@ -22,9 +22,9 @@ public class GiveItem {
                 "remove(rm) - 아이템 삭제 ",
         };
         if(args.length==1){
-//            for (String s : itemCommandList) {
-//                player.sendMessage(ChatColor.GOLD + s);
-//            }
+           // for (String s : itemCommandList) {
+           //     player.sendMessage(ChatColor.GOLD + s);
+           // }
             printLongLine(player, itemCommandList,1);
         } else if(isInteger(args[1])){
             int nowPage = Integer.parseInt(args[1]);
@@ -87,9 +87,9 @@ public class GiveItem {
                     "egg - 목축 ",
             };
         if(arg.equalsIgnoreCase("list")||arg.equalsIgnoreCase("l")){
-//            for (String s : presetsList) {
-//                player.sendMessage(ChatColor.GOLD + s);
-//            }
+           // for (String s : presetsList) {
+           //     player.sendMessage(ChatColor.GOLD + s);
+           // }
             printLongLine(player,  presetsList, 1);
         } else if(isInteger(arg)){
             int nowPage = Integer.parseInt(arg);

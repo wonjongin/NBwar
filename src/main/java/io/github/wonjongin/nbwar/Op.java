@@ -43,7 +43,7 @@ public class Op {
                 writer = new FileWriter("./plugins/NBwar/Op.yml");
                 obj.put(uuid, false);
                 yaml.dump(obj, writer);
-//                player.sendMessage(yaml.dump(obj));
+               // player.sendMessage(yaml.dump(obj));
                 getLogger().info("Op of " + player.getName() + " is set up");
                 getLogger().info("UUID is " + uuid);
             } catch (IOException e) {

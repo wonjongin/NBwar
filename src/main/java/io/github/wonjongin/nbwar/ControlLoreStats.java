@@ -97,22 +97,23 @@ public class ControlLoreStats {
         itemMeta.setLore(lore);
         item.setItemMeta(itemMeta);
     }
-
-    public static void setLoreStats(LoreStats loreStats, Item item) {
-        ItemMeta itemMeta = item.getItemStack().getItemMeta();
-        List<String> lore = itemMeta.getLore();
-        for (int i = 0; i < lore.size(); i++) {
-            lore.add(loreStats.getStatsNames().get(i) + ": " + String.valueOf(loreStats.getAllLore().get(i)));
-        }
-        itemMeta.setLore(lore);
-        item.getItemStack().setItemMeta(itemMeta);
-    }
+    //
+    //public static void setLoreStats(LoreStats loreStats, Item item) {
+    //    ItemMeta itemMeta = item.getItemStack().getItemMeta();
+    //    List<String> lore = itemMeta.getLore();
+    //    for (int i = 0; i < lore.size(); i++) {
+    //        lore.add(loreStats.getStatsNames().get(i) + ": " + String.valueOf(loreStats.getAllLore().get(i)));
+    //    }
+    //    itemMeta.setLore(lore);
+    //    item.getItemStack().setItemMeta(itemMeta);
+    //}
 
     public static String getColorOfItem(ItemStack item) {
         ItemMeta itemMeta = item.getItemMeta();
         String name = itemMeta.getDisplayName();
         HashMap<String, String> colors = new HashMap<String, String>() {{
             put("§8§lJack§7§lthe§f§lRipper", "§8");
+            put("§4§lLeo§6§lni§f§ldas", "§6");
         }};
         if (colors.containsKey(name)) {
             return colors.get(name);

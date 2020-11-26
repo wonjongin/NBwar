@@ -15,8 +15,8 @@ public class FileIO {
         }
         File dir = new File(dirPath);
         File file = new File(path);
-//        String[] pathList ;
-//        pathList = path.split("");
+       // String[] pathList ;
+       // pathList = path.split("");
 
         if(!dir.exists()){
             boolean result = dir.mkdirs();

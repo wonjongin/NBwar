@@ -81,7 +81,7 @@ public class NBwar extends JavaPlugin implements Listener {
     }
 
     @Override
-//    sender = 친 사람 cmd 명령 시작단어, args 명령본문 인
+    // sender = 친 사람 cmd 명령 시작단어, args 명령본문 인
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("n")) {
             Player player = (Player) sender;
@@ -91,10 +91,11 @@ public class NBwar extends JavaPlugin implements Listener {
                     "money(mn) - 돈 제어",
                     "heal(hl) - 체력 제어(준비중)",
                     "power(p) - 공격력 제어",
-                    "defend(df) - 방어력 제어",
                     "drain(dr) - 체력흡수 제어",
                     "critical(cri) - 크리티컬 제어",
                     "criticalPer(criper) - 크리티컬 확률 제어",
+                    "defend(df) - 방어력 제어",
+                    "igDefend(id) - 방어무시 제어",
                     "state(st) - 레벨 제어 (준비중)",
                     "item(it) - 아이템 관리 [얻기, 지우기...]",
                     "op - 권한 관리",
@@ -128,7 +129,9 @@ public class NBwar extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("defend") || args[0].equalsIgnoreCase("df")) {
                 setLoreMaster(player, "defend", args[1]);
                 // setLoreDefend(player, args[1]);
-            } else if (args[0].equalsIgnoreCase("heal") || args[0].equalsIgnoreCase("hl")) {
+            }else if (args[0].equalsIgnoreCase("igDefend") || args[0].equalsIgnoreCase("id")) {
+                setLoreMaster(player, "ignoreDefend", args[1]);
+            }  else if (args[0].equalsIgnoreCase("heal") || args[0].equalsIgnoreCase("hl")) {
                 healthCommands(player, args);
             } else if (args[0].equalsIgnoreCase("item") || args[0].equalsIgnoreCase("it")) {
                 giveItem(player, args);
@@ -143,12 +146,12 @@ public class NBwar extends JavaPlugin implements Listener {
                 moneyCommands(player, args);
             } else if (args[0].equalsIgnoreCase("ram")) {
                 checkram(player);
-//                showMemory(sender);
-//                runtime.gc();
-//                double totalMemory = runtime.totalMemory()/1048576;
-//                double memoryUsage = (runtime.totalMemory() - runtime.freeMemory())/1048576;
-//                String resRamUsage = Double.toString(memoryUsage)+"MB/"+Double.toString(totalMemory)+"MB";
-//                sender.sendMessage(ChatColor.GREEN + resRamUsage);
+               // showMemory(sender);
+               // runtime.gc();
+               // double totalMemory = runtime.totalMemory()/1048576;
+               // double memoryUsage = (runtime.totalMemory() - runtime.freeMemory())/1048576;
+               // String resRamUsage = Double.toString(memoryUsage)+"MB/"+Double.toString(totalMemory)+"MB";
+               // sender.sendMessage(ChatColor.GREEN + resRamUsage);
             } else if (args[0].equalsIgnoreCase("dev")) {
                 devCommand(player, args);
             } else if (args[0].equalsIgnoreCase("op")) {
@@ -185,23 +188,23 @@ public class NBwar extends JavaPlugin implements Listener {
 
     @EventHandler
     public void PlayerStat(EntityDamageByEntityEvent event) {
-//        double plusdamage = event.getDamage() + damage;
-//        double minusdamage = event.getDamage() - armor;
-//        if (minusdamage < 0) {
-//            minusdamage = 0;
-//        }
-//
-//        if (event.getDamager() instanceof Player) {
-//            Player player = (Player) event.getDamager();
-//            event.setDamage(plusdamage);
-//            player.sendMessage((int) plusdamage + "의 피해를 입혔습니다.");
-//        }
-//
-//        if (event.getEntity() instanceof Player) {
-//            Player player = (Player) event.getEntity();
-//            event.setDamage(minusdamage);
-//            player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
-//        }
+       // double plusdamage = event.getDamage() + damage;
+       // double minusdamage = event.getDamage() - armor;
+       // if (minusdamage < 0) {
+       //     minusdamage = 0;
+       // }
+       //
+       // if (event.getDamager() instanceof Player) {
+       //     Player player = (Player) event.getDamager();
+       //     event.setDamage(plusdamage);
+       //     player.sendMessage((int) plusdamage + "의 피해를 입혔습니다.");
+       // }
+       //
+       // if (event.getEntity() instanceof Player) {
+       //     Player player = (Player) event.getEntity();
+       //     event.setDamage(minusdamage);
+       //     player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
+       // }
         double totalDamage = 0;
         boolean receiverisPlayer = event.getEntityType() == EntityType.PLAYER;
         boolean loreSender = false;

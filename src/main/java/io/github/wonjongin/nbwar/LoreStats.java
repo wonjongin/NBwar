@@ -124,7 +124,7 @@ public class LoreStats {
     public ArrayList<String> toLoreList() {
         ArrayList<String> res = new ArrayList<>();
         for (int i = 0; i < this.getAllLore().size(); i++) {
-//            res.add(ChatColor.YELLOW + this.statsNames.get(i) + ": " + String.valueOf(this.getAllLore().get(i)));
+           // res.add(ChatColor.YELLOW + this.statsNames.get(i) + ": " + String.valueOf(this.getAllLore().get(i)));
             res.add(String.format("%s%s : %d",ChatColor.GOLD,this.statsNames.get(i), this.getAllLore().get(i)));
         }
         return res;
@@ -132,17 +132,17 @@ public class LoreStats {
     public ArrayList<String> toLoreList(String color) {
         ArrayList<String> res = new ArrayList<>();
         for (int i = 0; i < this.getAllLore().size(); i++) {
-//            res.add(ChatColor.YELLOW + this.statsNames.get(i) + ": " + String.valueOf(this.getAllLore().get(i)));
+           // res.add(ChatColor.YELLOW + this.statsNames.get(i) + ": " + String.valueOf(this.getAllLore().get(i)));
             res.add(String.format("%s%s : %d",color,this.statsNames.get(i), this.getAllLore().get(i)));
         }
         return res;
     }
 
-//    public int getPower() {
-//        return power;
-//    }
-//
-//    public void setPower(int power) {
-//        this.power = power;
-//    }
+   // public int getPower() {
+   //     return power;
+   // }
+   //
+   // public void setPower(int power) {
+   //     this.power = power;
+   // }
 }
