@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import static io.github.wonjongin.nbwar.Basic.isInteger;
+import static io.github.wonjongin.nbwar.Basic.randomOfPercent;
 import static io.github.wonjongin.nbwar.ControlLoreStats.setLoreMaster;
 import static io.github.wonjongin.nbwar.ControlPlayerStats.addHealthDouble;
 import static io.github.wonjongin.nbwar.ControlPlayerStats.healthCommands;
@@ -33,6 +34,8 @@ import static io.github.wonjongin.nbwar.Money.moneyCommands;
 import static io.github.wonjongin.nbwar.Money.moneySetup;
 import static io.github.wonjongin.nbwar.Op.*;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
+import static io.github.wonjongin.nbwar.hangul.addNumAdv;
+import static io.github.wonjongin.nbwar.hangul.addNumO;
 
 
 public class NBwar extends JavaPlugin implements Listener {
@@ -89,10 +92,12 @@ public class NBwar extends JavaPlugin implements Listener {
                     "heal(hl) - 체력 제어(준비중)",
                     "power(p) - 공격력 제어",
                     "defend(df) - 방어력 제어",
-                    "drain(dr) - 체력흡수 제어(준비중)",
+                    "drain(dr) - 체력흡수 제어",
+                    "critical(cri) - 크리티컬 제어",
+                    "criticalPer(criper) - 크리티컬 확률 제어",
                     "state(st) - 레벨 제어 (준비중)",
-                    "critical(cri) - 크리티컬 제어(준비중)",
                     "item(it) - 아이템 관리 [얻기, 지우기...]",
+                    "op - 권한 관리",
                     "ram - 램 정보 보기 ",
             };
             if (args.length == 0) {
@@ -115,7 +120,9 @@ public class NBwar extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("state") || args[0].equalsIgnoreCase("st")) {
                 sender.sendMessage(ChatColor.BLACK + "당신의 래벨은 " + player.getLevel() + " 입니다.");
             } else if (args[0].equalsIgnoreCase("critical") || args[0].equalsIgnoreCase("cri")) {
-                sender.sendMessage(ChatColor.GREEN + "준비중...");
+                setLoreMaster(player, "critical", args[1]);
+            } else if (args[0].equalsIgnoreCase("criticalPer") || args[0].equalsIgnoreCase("criper")) {
+                setLoreMaster(player, "criticalPercent", args[1]);
             } else if (args[0].equalsIgnoreCase("drain") || args[0].equalsIgnoreCase("dr")) {
                 setLoreMaster(player, "drain", args[1]);
             } else if (args[0].equalsIgnoreCase("defend") || args[0].equalsIgnoreCase("df")) {
@@ -145,7 +152,11 @@ public class NBwar extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("dev")) {
                 devCommand(player, args);
             } else if (args[0].equalsIgnoreCase("op")) {
-                setOp(player, player.getServer().getPlayer(args[1]), args[2]);
+                if (args.length == 1 || args.length == 2) {
+                    player.sendMessage(ChatColor.RED + "/n op <userName> <0 or 1>");
+                } else {
+                    setOp(player, player.getServer().getPlayer(args[1]), args[2]);
+                }
             } else {
                 sender.sendMessage(ChatColor.RED + "Command Not Found!!");
             }
@@ -206,8 +217,12 @@ public class NBwar extends JavaPlugin implements Listener {
             loreSender = true;
             LoreStats loreStatsOfSender = new LoreStats().parseToLoreStats(itemOfSender);
             totalDamage += loreStatsOfSender.getPower();
-            addHealthDouble(sender, sender, (double) loreStatsOfSender.getDrain(),1);
+            addHealthDouble(sender, sender, (double) loreStatsOfSender.getDrain(), 1);
             ignoreDefend = loreStatsOfSender.getIgnoreDefend();
+            if (randomOfPercent(loreStatsOfSender.getCriticalPercent())) {
+                totalDamage += loreStatsOfSender.getCritical();
+                sender.sendMessage(ChatColor.DARK_RED + "크리티컬!!");
+            }
         } catch (Exception e) {
             loreSender = false;
         }
@@ -219,7 +234,7 @@ public class NBwar extends JavaPlugin implements Listener {
                 loreReceiver = true;
                 LoreStats loreStatsOfReceiver = new LoreStats().parseToLoreStats(itemOfReceiver);
                 if (loreStatsOfReceiver.getDefend() - ignoreDefend >= 0) {
-                    receiver.sendMessage(ChatColor.GREEN + String.format("%d (을)를 방어했습니다.", loreStatsOfReceiver.getDefend()));
+                    receiver.sendMessage(ChatColor.GREEN + String.format("%s 방어했습니다.", addNumO(loreStatsOfReceiver.getDefend())));
                     totalDamage -= loreStatsOfReceiver.getDefend();
                     totalDamage += ignoreDefend;
                 }

@@ -71,21 +71,21 @@ public class Op {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            Map<String, Boolean> obj = yaml.load(inputStream);
-            if (!obj.containsKey(uuid)) {
-                FileWriter writer = null;
-                try {
-                    writer = new FileWriter("./plugins/NBwar/Op.yml");
-                    obj.put(uuid, isOp);
-                    yaml.dump(obj, writer);
-                    sender.sendMessage(ChatColor.YELLOW + receiver.getName() + "에게 오피를 " + String.valueOf(isOp) + "로 설정했습니다. ");
-                    receiver.sendMessage(ChatColor.YELLOW + sender.getName() + "(이)가 오피를 " + String.valueOf(isOp) + "로 설정했습니다. ");
-                    getLogger().info("Op of " + receiver.getName() + " is set up");
-                    getLogger().info("UUID is " + uuid);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            Map<String, Object> obj = yaml.load(inputStream);
+
+            FileWriter writer = null;
+            try {
+                writer = new FileWriter("./plugins/NBwar/Op.yml");
+                obj.put(uuid, isOp);
+                yaml.dump(obj, writer);
+                sender.sendMessage(ChatColor.YELLOW + receiver.getName() + "에게 오피를 " + String.valueOf(isOp) + "로 설정했습니다. ");
+                receiver.sendMessage(ChatColor.YELLOW + sender.getName() + "(이)가 오피를 " + String.valueOf(isOp) + "로 설정했습니다. ");
+                getLogger().info("Op of " + receiver.getName() + " is set up");
+                getLogger().info("UUID is " + uuid);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
         }
     }
 

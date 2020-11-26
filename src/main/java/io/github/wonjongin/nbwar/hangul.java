@@ -25,6 +25,12 @@ public class hangul {
         String Adv = hasUnderCase(lastChar) ? "으로" : "로";
         return numStr + Adv;
     }
+    public static String addNumO(int num) {
+        String numStr = String.valueOf(num);
+        String lastChar = numToHangul(num % 10);
+        String O = hasUnderCase(lastChar) ? "을" : "를";
+        return numStr + O;
+    }
 
     public static String numToHangul(int num) {
         HashMap<Integer, String> map = new HashMap<Integer, String>() {{
