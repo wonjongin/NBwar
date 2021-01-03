@@ -7,11 +7,14 @@ import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -33,6 +36,9 @@ import static io.github.wonjongin.nbwar.Hardware.checkram;
 import static io.github.wonjongin.nbwar.Money.moneyCommands;
 import static io.github.wonjongin.nbwar.Money.moneySetup;
 import static io.github.wonjongin.nbwar.Op.*;
+import static io.github.wonjongin.nbwar.Permit.*;
+import static io.github.wonjongin.nbwar.Potion.isPotion;
+import static io.github.wonjongin.nbwar.Potion.rightClickPotion;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
 import static io.github.wonjongin.nbwar.hangul.addNumAdv;
 import static io.github.wonjongin.nbwar.hangul.addNumO;
@@ -65,6 +71,14 @@ public class NBwar extends JavaPlugin implements Listener {
         if (!opFile.exists()) {
             createFile("./plugins/NBwar/Op.yml", "{ uuid: boolean}");
         }
+        File permitDir = new File("./plugins/NBwar/Permit");
+        if (!permitDir.exists()) {
+            boolean result = permitDir.mkdirs();
+        }
+        File breakPermitFile = new File("./plugins/NBwar/Permit/break.yml");
+        if (!breakPermitFile.exists()) {
+            createFile("./plugins/NBwar/Permit/break.yml", "{ uuid: boolean }");
+        }
         File helpFile = new File("./plugins/NBwar/help/init.txt");
         if (!helpFile.exists()) {
             createFile("./plugins/NBwar/help/init.txt", "Help messages of NBwar");
@@ -89,7 +103,8 @@ public class NBwar extends JavaPlugin implements Listener {
                     "Help!! Type /n <page> ",
                     "info - 플러그인 정보 ",
                     "money(mn) - 돈 제어",
-                    "heal(hl) - 체력 제어(준비중)",
+                    "heal(hl) - 체력 제어",
+                    "potion(pt) - 포션 제어",
                     "power(p) - 공격력 제어",
                     "drain(dr) - 체력흡수 제어",
                     "critical(cri) - 크리티컬 제어",
@@ -98,7 +113,8 @@ public class NBwar extends JavaPlugin implements Listener {
                     "igDefend(id) - 방어무시 제어",
                     "state(st) - 레벨 제어 (준비중)",
                     "item(it) - 아이템 관리 [얻기, 지우기...]",
-                    "op - 권한 관리",
+                    "permit(pr) - 권한 관리",
+                    "op - 오피 관리",
                     "ram - 램 정보 보기 ",
             };
             if (args.length == 0) {
@@ -129,9 +145,11 @@ public class NBwar extends JavaPlugin implements Listener {
             } else if (args[0].equalsIgnoreCase("defend") || args[0].equalsIgnoreCase("df")) {
                 setLoreMaster(player, "defend", args[1]);
                 // setLoreDefend(player, args[1]);
-            }else if (args[0].equalsIgnoreCase("igDefend") || args[0].equalsIgnoreCase("id")) {
+            } else if (args[0].equalsIgnoreCase("igDefend") || args[0].equalsIgnoreCase("id")) {
                 setLoreMaster(player, "ignoreDefend", args[1]);
-            }  else if (args[0].equalsIgnoreCase("heal") || args[0].equalsIgnoreCase("hl")) {
+            } else if (args[0].equalsIgnoreCase("heal") || args[0].equalsIgnoreCase("hl")) {
+                healthCommands(player, args);
+            } else if (args[0].equalsIgnoreCase("potion") || args[0].equalsIgnoreCase("pt")) {
                 healthCommands(player, args);
             } else if (args[0].equalsIgnoreCase("item") || args[0].equalsIgnoreCase("it")) {
                 giveItem(player, args);
@@ -146,14 +164,17 @@ public class NBwar extends JavaPlugin implements Listener {
                 moneyCommands(player, args);
             } else if (args[0].equalsIgnoreCase("ram")) {
                 checkram(player);
-               // showMemory(sender);
-               // runtime.gc();
-               // double totalMemory = runtime.totalMemory()/1048576;
-               // double memoryUsage = (runtime.totalMemory() - runtime.freeMemory())/1048576;
-               // String resRamUsage = Double.toString(memoryUsage)+"MB/"+Double.toString(totalMemory)+"MB";
-               // sender.sendMessage(ChatColor.GREEN + resRamUsage);
+                // showMemory(sender);
+                // runtime.gc();
+                // double totalMemory = runtime.totalMemory()/1048576;
+                // double memoryUsage = (runtime.totalMemory() - runtime.freeMemory())/1048576;
+                // String resRamUsage = Double.toString(memoryUsage)+"MB/"+Double.toString(totalMemory)+"MB";
+                // sender.sendMessage(ChatColor.GREEN + resRamUsage);
             } else if (args[0].equalsIgnoreCase("dev")) {
                 devCommand(player, args);
+            } else if (args[0].equalsIgnoreCase("permit") || args[0].equalsIgnoreCase("pr")) {
+                if (isOpPlayer(player)) permitCommands(player, args);
+                else player.sendMessage(ChatColor.RED + "권한이 없습니다.");
             } else if (args[0].equalsIgnoreCase("op")) {
                 if (args.length == 1 || args.length == 2) {
                     player.sendMessage(ChatColor.RED + "/n op <userName> <0 or 1>");
@@ -173,6 +194,7 @@ public class NBwar extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         moneySetup(player);
         opSetup(player);
+        disableBreak(player);
         event.setJoinMessage(ChatColor.AQUA + "Welcome to NBwar!");
         getLogger().info(player.getName() + " came into server!");
         damage = player.getLevel();
@@ -188,23 +210,23 @@ public class NBwar extends JavaPlugin implements Listener {
 
     @EventHandler
     public void PlayerStat(EntityDamageByEntityEvent event) {
-       // double plusdamage = event.getDamage() + damage;
-       // double minusdamage = event.getDamage() - armor;
-       // if (minusdamage < 0) {
-       //     minusdamage = 0;
-       // }
-       //
-       // if (event.getDamager() instanceof Player) {
-       //     Player player = (Player) event.getDamager();
-       //     event.setDamage(plusdamage);
-       //     player.sendMessage((int) plusdamage + "의 피해를 입혔습니다.");
-       // }
-       //
-       // if (event.getEntity() instanceof Player) {
-       //     Player player = (Player) event.getEntity();
-       //     event.setDamage(minusdamage);
-       //     player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
-       // }
+        // double plusdamage = event.getDamage() + damage;
+        // double minusdamage = event.getDamage() - armor;
+        // if (minusdamage < 0) {
+        //     minusdamage = 0;
+        // }
+        //
+        // if (event.getDamager() instanceof Player) {
+        //     Player player = (Player) event.getDamager();
+        //     event.setDamage(plusdamage);
+        //     player.sendMessage((int) plusdamage + "의 피해를 입혔습니다.");
+        // }
+        //
+        // if (event.getEntity() instanceof Player) {
+        //     Player player = (Player) event.getEntity();
+        //     event.setDamage(minusdamage);
+        //     player.sendMessage((int) minusdamage + "의 피해를 입었습니다.");
+        // }
         double totalDamage = 0;
         boolean receiverisPlayer = event.getEntityType() == EntityType.PLAYER;
         boolean loreSender = false;
@@ -270,12 +292,28 @@ public class NBwar extends JavaPlugin implements Listener {
         }
         Location location = block.getLocation();
 
+        if (!canBreak(player)){
+            event.setCancelled(true);
+        }
+
         // player.getWorld().getBlockAt(location).setType(block.getType());
 
 
         // player.getInventory().addItem(itemStack);
         // player.sendMessage(ChatColor.GREEN + "Get block twice!!");
 
+    }
+
+    @EventHandler
+    public void rightClick(PlayerInteractEvent event){
+        Player player = event.getPlayer();
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        String itemName = itemStack.getItemMeta().getDisplayName();
+        if(event.getAction() == Action.RIGHT_CLICK_AIR){
+            if(isPotion(itemName)){
+                rightClickPotion(player, itemName);
+            }
+        }
     }
 
 
