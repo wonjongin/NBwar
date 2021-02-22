@@ -1,5 +1,6 @@
 package io.github.wonjongin.nbwar;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -7,7 +8,6 @@ import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,7 +40,6 @@ import static io.github.wonjongin.nbwar.Permit.*;
 import static io.github.wonjongin.nbwar.Potion.isPotion;
 import static io.github.wonjongin.nbwar.Potion.rightClickPotion;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
-import static io.github.wonjongin.nbwar.hangul.addNumAdv;
 import static io.github.wonjongin.nbwar.hangul.addNumO;
 
 
@@ -48,6 +47,7 @@ public class NBwar extends JavaPlugin implements Listener {
 
     public static double damage = 0;
     public static double armor = 0;
+    private static NBwar instance;
 
     @Override
     public void onEnable() {
@@ -86,6 +86,11 @@ public class NBwar extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(this, this);
         // 이벤트 핸들링 하려면 반드시 필요함
         getLogger().info("EventHandler is enabled");
+
+        boolean useHolographicDisplays = Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays");
+        // call holographic display
+
+        instance = this;
     }
 
     @Override
@@ -292,7 +297,7 @@ public class NBwar extends JavaPlugin implements Listener {
         }
         Location location = block.getLocation();
 
-        if (!canBreak(player)){
+        if (!canBreak(player)) {
             event.setCancelled(true);
         }
 
@@ -305,16 +310,18 @@ public class NBwar extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void rightClick(PlayerInteractEvent event){
+    public void rightClick(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         String itemName = itemStack.getItemMeta().getDisplayName();
-        if(event.getAction() == Action.RIGHT_CLICK_AIR){
-            if(isPotion(itemName)){
+        if (event.getAction() == Action.RIGHT_CLICK_AIR) {
+            if (isPotion(itemName)) {
                 rightClickPotion(player, itemName);
             }
         }
     }
 
-
+    public static NBwar getPlugin() {
+        return instance;
+    }
 }

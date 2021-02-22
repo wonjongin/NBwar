@@ -28,16 +28,16 @@ public class Money {
                 "Money Commands",
                 "Type /n mn <command>",
                 "view(v) - 돈 보기 ",
-               // "set(st) - 지갑 생성 ",
+                // "set(st) - 지갑 생성 ",
                 "send(s) - 보내기 ",
                 "withdraw(w) - 인출 ",
                 "deposit(d) - 예금 ",
 
         };
         if (args.length == 1) {
-           // for (String s : itemCommandList) {
-           //     player.sendMessage(ChatColor.GOLD + s);
-           // }
+            // for (String s : itemCommandList) {
+            //     player.sendMessage(ChatColor.GOLD + s);
+            // }
             printLongLine(player, moneyCommandList, 1);
         } else if (isInteger(args[1])) {
             int nowPage = Integer.parseInt(args[1]);
@@ -95,17 +95,17 @@ public class Money {
                 writer = new FileWriter("./plugins/NBwar/Money/Money.yml");
                 obj.put(uuid, 1);
                 yaml.dump(obj, writer);
-               // player.sendMessage(yaml.dump(obj));
+                // player.sendMessage(yaml.dump(obj));
                 getLogger().info("Money of " + player.getName() + " is set up");
                 getLogger().info("UUID is " + uuid);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-           // playersList.add(uuid);
-           // obj.put("players", new String[]{uuid});
+            // playersList.add(uuid);
+            // obj.put("players", new String[]{uuid});
 
 
-           // createFile("./plugins/NBwar/Money/Money.yml", uuid+": 100000");
+            // createFile("./plugins/NBwar/Money/Money.yml", uuid+": 100000");
         }
     }
 
@@ -124,7 +124,7 @@ public class Money {
             writer = new FileWriter("./plugins/NBwar/Money/Money.yml");
             obj.put(uuid, money);
             yaml.dump(obj, writer);
-               // player.sendMessage(yaml.dump(obj));
+            // player.sendMessage(yaml.dump(obj));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -269,14 +269,14 @@ public class Money {
 
         final int[] res = {d100, d50, d20, d10, d5, d2, d1};
         // return new int[]{d100, d50, d20, d10, d5, d2, d1};
-        return new HashMap<String, Integer>(){{
-           put("d100", res[0]);
-           put("d50", res[1]);
-           put("d20", res[2]);
-           put("d10", res[3]);
-           put("d5", res[4]);
-           put("d2", res[5]);
-           put("d1", res[6]);
+        return new HashMap<String, Integer>() {{
+            put("d100", res[0]);
+            put("d50", res[1]);
+            put("d20", res[2]);
+            put("d10", res[3]);
+            put("d5", res[4]);
+            put("d2", res[5]);
+            put("d1", res[6]);
         }};
     }
 }

@@ -43,8 +43,8 @@ public class Print {
                     }
                 }
             }
-            String printPage = "---------< "+nowPage+" / "+pages+" >----------------";
-            player.sendMessage(ChatColor.GREEN+printPage);
+            String printPage = "---------< " + nowPage + " / " + pages + " >----------------";
+            player.sendMessage(ChatColor.GREEN + printPage);
         }
     }
 }

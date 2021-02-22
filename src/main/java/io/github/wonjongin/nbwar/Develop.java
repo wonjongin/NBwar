@@ -1,10 +1,8 @@
 package io.github.wonjongin.nbwar;
 
-import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -12,9 +10,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.SplittableRandom;
 
 import static io.github.wonjongin.nbwar.Basic.isInteger;
+import static io.github.wonjongin.nbwar.Holograpic.showSimpleHologram;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
 import static org.bukkit.Bukkit.getLogger;
 
@@ -31,6 +29,7 @@ public class Develop {
                 "loreStats(ls) - 로어스탯보기",
                 "setName(sn) - 이름 설정(색상은&)",
                 "NBT(nbt) - NBT 보기",
+                "holo(h) - hologram 보기"
         };
         if (args.length == 1) {
             printLongLine(player, devCommandList, 1);
@@ -51,6 +50,8 @@ public class Develop {
             viewLoreStats(player);
         } else if (args[1].equalsIgnoreCase("NBT") || args[1].equalsIgnoreCase("nbt")) {
             viewNBT(player);
+        } else if (args[1].equalsIgnoreCase("holo") || args[1].equalsIgnoreCase("h")) {
+            viewSimpleHologram(player);
         } else if (args[1].equalsIgnoreCase("test") || args[1].equalsIgnoreCase("tt")) {
             viewTest(player);
         } else {
@@ -168,18 +169,31 @@ public class Develop {
         String name = player.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
         player.sendMessage(name);
         getLogger().info(name);
-        if (name.equals("JacktheRipper")) {
-            player.sendMessage(ChatColor.GREEN + "is JacktheRipper not color code");
-        } else if(name.equals("&8&lJack&7&lthe&f&lRipper")){
-            player.sendMessage(ChatColor.GREEN+"엠퍼센트");
-        } else if(name.equals("§8§lJack§7§lthe§f§lRipper")){
-            player.sendMessage(ChatColor.GREEN+"옵션6");
+        switch (name) {
+            case "JacktheRipper":
+                player.sendMessage(ChatColor.GREEN + "is JacktheRipper not color code");
+                break;
+            case "&8&lJack&7&lthe&f&lRipper":
+                player.sendMessage(ChatColor.GREEN + "엠퍼센트");
+                break;
+            case "§8§lJack§7§lthe§f§lRipper":
+                player.sendMessage(ChatColor.GREEN + "옵션6");
+                break;
         }
     }
-    public static void setName(Player player, String str){
+
+    public static void setName(Player player, String str) {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(str.replace("&","§"));
+        itemMeta.setDisplayName(str.replace("&", "§"));
         itemStack.setItemMeta(itemMeta);
+    }
+
+    public static void viewSimpleHologram(Player player) {
+        ArrayList<String> texts = new ArrayList<>(Arrays.asList(
+                "hello",
+                "world"
+        ));
+        showSimpleHologram(player, texts);
     }
 }

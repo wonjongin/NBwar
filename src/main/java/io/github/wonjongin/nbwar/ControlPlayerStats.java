@@ -62,8 +62,8 @@ public class ControlPlayerStats {
         }
         receiver.setHealth(finalHealth);
         if (mode == 1) {
-            sender.sendMessage(ChatColor.YELLOW+"체력이 "+amountofHeal+" 만큼 더해졌습니다.");
-        } else if (mode == 2){
+            sender.sendMessage(ChatColor.YELLOW + "체력이 " + amountofHeal + " 만큼 더해졌습니다.");
+        } else if (mode == 2) {
             sender.sendMessage(ChatColor.GOLD + receiver.getName() + "의 체력을 " + amountofHeal + " 만큼 더했습니다.");
             receiver.sendMessage(ChatColor.YELLOW + sender.getName() + "이 당신의 체력을 " + amountofHeal + " 만큼 더했습니다.");
         }

@@ -2,6 +2,7 @@ name: NBwar
 version: @version@
 description: A PVP plugin for minecraft 1.12.2
 main: io.github.wonjongin.nbwar.NBwar
+softdepend: [HolographicDisplays]
 
 commands:
   n:

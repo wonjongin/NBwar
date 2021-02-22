@@ -38,7 +38,7 @@ public class Permit {
         }
     }
 
-    public static boolean canBreak(Player player){
+    public static boolean canBreak(Player player) {
         String uuid = player.getUniqueId().toString();
         Yaml yaml = new Yaml();
         InputStream inputStream = null;
@@ -51,7 +51,7 @@ public class Permit {
         return obj.get(uuid);
     }
 
-    public static void enableBreak(Player player){
+    public static void enableBreak(Player player) {
         String uuid = player.getUniqueId().toString();
         Yaml yaml = new Yaml();
         InputStream inputStream = null;
@@ -77,7 +77,7 @@ public class Permit {
 
     }
 
-    public static void disableBreak(Player player){
+    public static void disableBreak(Player player) {
         String uuid = player.getUniqueId().toString();
         Yaml yaml = new Yaml();
         InputStream inputStream = null;

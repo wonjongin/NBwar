@@ -34,6 +34,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
     compile 'de.tr7zw:item-nbt-api-plugin:2.6.0'
+    compile 'com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.6'
 }
 
 processResources {

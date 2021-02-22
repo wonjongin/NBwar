@@ -12,7 +12,7 @@ import static io.github.wonjongin.nbwar.Basic.isInteger;
 import static io.github.wonjongin.nbwar.Print.printLongLine;
 
 public class Potion {
-    public void potionCommand(Player player, String[] args){
+    public void potionCommand(Player player, String[] args) {
         String[] portionCommandList = {
                 "portion Commands",
                 "Type /n heal <command>",
@@ -38,22 +38,22 @@ public class Potion {
         }
     }
 
-    public static ArrayList<String> getPotions(){
+    public static ArrayList<String> getPotions() {
         return new ArrayList<>(Arrays.asList(
                 "StdTea"
         ));
     }
 
 
-    public static void potionMaster(Player player, String potionName, int amount){
+    public static void potionMaster(Player player, String potionName, int amount) {
 
     }
 
-    public static boolean isPotion(String name){
+    public static boolean isPotion(String name) {
         return getPotions().contains(name);
     }
 
-    public static void rightClickPotion(Player player, String potionName){
-        
+    public static void rightClickPotion(Player player, String potionName) {
+
     }
 }

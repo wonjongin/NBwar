@@ -45,18 +45,18 @@ public class LoreStats {
     private int ignoreDefend = 0; // 방어력 무시
     private String uuidStr = uuid.toString();
     //    private String powerString = String.valueOf(this.power); // 공격력
-//    private String criticalPercentString = String.valueOf(this.criticalPercent);
-//    ; // 크리 확률
-//    private String criticalString = String.valueOf(this.critical);
-//    ; // 크리 데미지
-//    private String healthString = String.valueOf(this.health);
-//    ; // 체력
-//    private String drainString = String.valueOf(this.drain);
-//    ; // 피흡
-//    private String defendString = String.valueOf(this.defend);
-//    ; // 방어력
-//    private String ignoreDefendString = String.valueOf(this.ignoreDefend);
-//    ; // 방어력 무시
+    //    private String criticalPercentString = String.valueOf(this.criticalPercent);
+    //    ; // 크리 확률
+    //    private String criticalString = String.valueOf(this.critical);
+    //    ; // 크리 데미지
+    //    private String healthString = String.valueOf(this.health);
+    //    ; // 체력
+    //    private String drainString = String.valueOf(this.drain);
+    //    ; // 피흡
+    //    private String defendString = String.valueOf(this.defend);
+    //    ; // 방어력
+    //    private String ignoreDefendString = String.valueOf(this.ignoreDefend);
+    //    ; // 방어력 무시
     @Getter
     @Setter
     private ArrayList<String> statsNames = new ArrayList<>(Arrays.asList(
@@ -90,7 +90,7 @@ public class LoreStats {
         }
         List<String> lore = itemMeta.getLore();
         for (int i = 0; i < lore.size(); i++) {
-            String str = lore.get(i).replaceAll("§.","").replaceAll(patternNumStr, "");
+            String str = lore.get(i).replaceAll("§.", "").replaceAll(patternNumStr, "");
             // getLogger().info("로어str: " + str);
             if (lore.get(i).contains(statsNames.get(0))) {
                 this.power = Integer.parseInt(str);
@@ -124,25 +124,26 @@ public class LoreStats {
     public ArrayList<String> toLoreList() {
         ArrayList<String> res = new ArrayList<>();
         for (int i = 0; i < this.getAllLore().size(); i++) {
-           // res.add(ChatColor.YELLOW + this.statsNames.get(i) + ": " + String.valueOf(this.getAllLore().get(i)));
-            res.add(String.format("%s%s : %d",ChatColor.GOLD,this.statsNames.get(i), this.getAllLore().get(i)));
-        }
-        return res;
-    }
-    public ArrayList<String> toLoreList(String color) {
-        ArrayList<String> res = new ArrayList<>();
-        for (int i = 0; i < this.getAllLore().size(); i++) {
-           // res.add(ChatColor.YELLOW + this.statsNames.get(i) + ": " + String.valueOf(this.getAllLore().get(i)));
-            res.add(String.format("%s%s : %d",color,this.statsNames.get(i), this.getAllLore().get(i)));
+            // res.add(ChatColor.YELLOW + this.statsNames.get(i) + ": " + String.valueOf(this.getAllLore().get(i)));
+            res.add(String.format("%s%s : %d", ChatColor.GOLD, this.statsNames.get(i), this.getAllLore().get(i)));
         }
         return res;
     }
 
-   // public int getPower() {
-   //     return power;
-   // }
-   //
-   // public void setPower(int power) {
-   //     this.power = power;
-   // }
+    public ArrayList<String> toLoreList(String color) {
+        ArrayList<String> res = new ArrayList<>();
+        for (int i = 0; i < this.getAllLore().size(); i++) {
+            // res.add(ChatColor.YELLOW + this.statsNames.get(i) + ": " + String.valueOf(this.getAllLore().get(i)));
+            res.add(String.format("%s%s : %d", color, this.statsNames.get(i), this.getAllLore().get(i)));
+        }
+        return res;
+    }
+
+    // public int getPower() {
+    //     return power;
+    // }
+    //
+    // public void setPower(int power) {
+    //     this.power = power;
+    // }
 }
